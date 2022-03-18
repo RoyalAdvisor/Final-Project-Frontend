@@ -12,7 +12,7 @@
           Create a new post
         </button>
       </div>
-      <div class="post-item shadow" v-for="post in posts" :key="post._id">
+      <div class="post-item shadow-sm" v-for="post in posts" :key="post._id">
         <div class="post-image">
           <img :src="post.main_image" />
         </div>
@@ -196,7 +196,7 @@ export default {
           .then((res) => res.json())
           .then(() => {
             alert("Your post has been created!");
-            this.$router.push("/");
+            location.reload();
           });
       } catch (error) {
         console.error(error);

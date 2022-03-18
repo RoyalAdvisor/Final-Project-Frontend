@@ -42,9 +42,9 @@
       </div>
     </div>
     <div class="comment-container">
-      <h5>Comments</h5>
-      <form class="row create-form">
-        <div class="col-md-12">
+      <h5 v-if="currentUser">Comments</h5>
+      <form class="row create-form" v-if="currentUser">
+        <div class="text-container">
           <textarea
             type="text"
             class="form-control"
@@ -53,7 +53,7 @@
             v-model="newComment"
           />
         </div>
-        <div class="comment-btn">
+        <div class="comment-btn" v-if="currentUser">
           <button
             class="btn btn-muted"
             @click.prevent="addComment(this.postId)"
@@ -63,28 +63,31 @@
           </button>
         </div>
       </form>
+      <div class="comments-header">
+        <h5>Recent Comments</h5>
+      </div>
       <div class="comments-wrapper">
-        <div class="comments-header">
-          <h5>Recent Comments</h5>
-        </div>
         <div
           class="comments"
-          v-for="comment in post.comments"
+          v-for="(comment, index) in post.comments"
           :key="comment._id"
         >
           <div class="comment-info">
             <h6>{{ comment.posted_by }}</h6>
             <cite>{{ comment.content }}</cite>
           </div>
-          <div class="comment-action">
+          <div class="comment-action" v-if="currentUser">
             <button
               class="btn btn-muted"
-              @click.prevent="deleteComment(this.postId)"
+              @click.prevent="deleteComment(this.postId, index)"
             >
               Delete
             </button>
           </div>
         </div>
+      </div>
+      <div v-if="post.comments == 0">
+        <h6 class="text-muted">No comments have been posted</h6>
       </div>
     </div>
   </div>
@@ -304,7 +307,7 @@ export default {
             alert("The post was successfully deleted.");
           })
           .then(() => {
-            this.$router.push("/");
+            location.reload();
           });
       } catch (error) {
         console.error(error);
@@ -337,7 +340,7 @@ export default {
           .then(() => {
             alert("Post has been updated successfully!");
             this.loading = false;
-            this.$router.push("/");
+            location.reload();
           });
       } catch (error) {
         console.error(error);
@@ -364,13 +367,17 @@ export default {
           .then((res) => res.json())
           .then(() => {
             alert("Your comment has been posted!");
-            this.$router.push("/");
+            location.reload();
           });
       } catch (error) {
         console.error(error);
       }
     },
-    async deleteComment(postId) {
+    async deleteComment(postId, index) {
+      if (!localStorage.getItem("user")) {
+        alert("User not found");
+        return;
+      }
       const headers = {
         headers: {
           "Content-Type": "application/json",
@@ -379,19 +386,14 @@ export default {
           }`,
         },
       };
-      const new_url = `${url}${postId}/comments/delete`;
-      const username = JSON.parse(localStorage.getItem("user")).username;
-      let commentList = this.post.comments;
-      let commentCreator = null;
-      commentList.forEach((comment) => {
-        commentCreator = comment.posted_by;
-      });
-      let commentIndex = commentList.findIndex((comment) => comment._id);
-      console.log(commentIndex);
-      if (username !== commentCreator) {
-        return alert("You cannot delete this comment!");
-      }
+      const deleteURL = `${url}${postId}/comments/delete`;
+      // let currentUser = JSON.parse(localStorage.getItem("user"))._id;
+      let comments = this.post.comments;
       try {
+        axios.delete(deleteURL, headers).then(() => {
+          comments.splice(index, 1);
+          location.reload;
+        });
       } catch (error) {
         console.error(error);
       }
@@ -460,10 +462,15 @@ export default {
   width: 50%;
   justify-content: flex-start;
   align-items: center;
+  padding-left: 20px;
 }
 .form-control {
   display: flex;
   flex-basis: 100%;
+}
+.text-container {
+  padding: 32px;
+  width: 100%;
 }
 textarea {
   min-height: 264px;
@@ -511,6 +518,7 @@ cite {
   align-items: flex-start;
   flex-direction: column;
   row-gap: 1rem;
+  padding: 20px;
 }
 .comments {
   display: flex;
@@ -519,5 +527,8 @@ cite {
   flex-direction: row;
   row-gap: 0.5rem;
   width: 100%;
+}
+.comment-btn {
+  padding-left: 20px;
 }
 </style>

@@ -80,7 +80,7 @@ export default {
   },
   mounted() {
     if (this.loggedIn) {
-      this.$router.push("/profile");
+      this.$router.push("/");
     }
   },
   methods: {
@@ -89,7 +89,7 @@ export default {
       this.$store.dispatch("auth/login", user).then(
         () => {
           this.loading = false;
-          this.$router.push("/profile");
+          this.$router.push("/");
         },
         (err) => {
           this.message = err;
