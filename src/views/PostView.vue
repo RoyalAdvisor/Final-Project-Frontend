@@ -360,7 +360,7 @@ export default {
           .then(() => {
             alert("Post has been updated successfully!");
             this.loading = false;
-            this.$router.push("/");
+            this.$router.go();
           });
       } catch (error) {
         console.error(error);
@@ -403,7 +403,7 @@ export default {
           .then((res) => res.json())
           .then(() => {
             alert("Your comment has been deleted!");
-            this.$router.push("/");
+            this.$router.go();
           });
       } catch (error) {
         console.error(error);
