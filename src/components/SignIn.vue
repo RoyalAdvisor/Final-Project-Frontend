@@ -41,7 +41,7 @@
           >
         </div>
         <div class="form-group">
-          <div class="error-message" v-if="message" role="alert">
+          <div class="message" v-if="message" :class="'alert-danger'">
             <h5>{{ message }}</h5>
           </div>
         </div>
@@ -92,6 +92,8 @@ export default {
           this.$router.push("/");
         },
         (err) => {
+          err =
+            "Seems like there was an error, try checking your sign-in credentials.";
           this.message = err;
           this.loading = false;
         }
@@ -160,5 +162,10 @@ Form {
   padding: 0;
   margin: 0;
   row-gap: 0.5rem;
+}
+.message {
+  padding: 20px;
+  border: 1px solid red;
+  border-radius: 10px;
 }
 </style>

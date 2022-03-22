@@ -205,7 +205,7 @@ export default {
           .then(() => {
             alert("Your profile has been updated successfully!");
             this.$store.dispatch("auth/logout");
-            this.$router.push("/signin");
+            this.$router.push("/profile/updated");
           });
       } catch (error) {
         console.error(error);
@@ -225,7 +225,7 @@ export default {
         await axios.delete(new_url, headers, this.currentUser).then(() => {
           alert("Profile has been deleted!");
           this.$store.dispatch("auth/logout");
-          this.$router.push("/signin");
+          this.$router.push("/profile/deleted");
         });
       } catch (error) {
         console.error(error);

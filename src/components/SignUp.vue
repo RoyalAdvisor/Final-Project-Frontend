@@ -46,15 +46,15 @@
               <span v-show="loading"> <Loader /> </span>
             </button>
           </div>
+          <div
+            v-if="message"
+            class="message"
+            :class="successful ? 'alert-success' : 'alert-danger'"
+          >
+            <h5>{{ message }}</h5>
+          </div>
         </div>
       </Form>
-      <div
-        v-if="message"
-        class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
-      >
-        <h5>{{ message }}</h5>
-      </div>
     </div>
   </div>
 </template>
@@ -116,7 +116,10 @@ export default {
           this.$router.push("/success");
         },
         (err) => {
+          err =
+            "Seems like that username is already in use, try using a different one.";
           this.message = err;
+          this.loading = false;
           this.successful = false;
         }
       );
@@ -192,5 +195,10 @@ Form {
   padding: 0;
   margin: 0;
   row-gap: 0.5rem;
+}
+.message {
+  padding: 20px;
+  border: 1px solid red;
+  border-radius: 10px;
 }
 </style>

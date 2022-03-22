@@ -5,6 +5,8 @@ import PostView from "../views/PostView.vue";
 import SignIn from "../components/SignIn.vue";
 import SignUp from "../components/SignUp.vue";
 import SignupSuccess from "../components/SignupSuccess.vue";
+import UpdateProfileSuccess from "../components/UpdateProfileSuccess.vue";
+import DeleteProfileSuccess from "../components/DeleteProfileSuccess.vue";
 
 const routes = [
   {
@@ -26,6 +28,16 @@ const routes = [
     path: "/success",
     name: "success",
     component: SignupSuccess,
+  },
+  {
+    path: "/profile/updated",
+    name: "updated",
+    component: UpdateProfileSuccess,
+  },
+  {
+    path: "/profile/deleted",
+    name: "deleted",
+    component: DeleteProfileSuccess,
   },
   {
     path: "/signin",

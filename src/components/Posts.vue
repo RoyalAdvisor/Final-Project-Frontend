@@ -12,9 +12,29 @@
           Create a new post
         </button>
       </div>
+      <div class="search-actions">
+        <div class="search">
+          <label for="search">Search:</label>
+          <input
+            type="text"
+            v-model="search"
+            name="search"
+            placeholder="Find blogs..."
+          />
+        </div>
+        <div class="catergory">
+          <label for="sort-by-catergory">Sort by:</label>
+          <select name="sort-by-catergory" id="catergory">
+            <option value="...">Select Catergory</option>
+            <option value="Motivational">Motivational</option>
+            <option value="Art">Art</option>
+            <option value="Lifestyle">Lifestyle</option>
+          </select>
+        </div>
+      </div>
       <div
         class="post-item shadow-sm"
-        v-for="post in posts.slice(0, count)"
+        v-for="post in filteredPosts.slice(0, count)"
         :key="post._id"
       >
         <div class="formatted-date">
@@ -31,6 +51,7 @@
         <div class="post-content">
           <h3>{{ post.title }}</h3>
           <h4>{{ post.subtitle }}</h4>
+          <h6 class="text-muted">{{ post.created_by }}</h6>
           <div class="buttons">
             <router-link :to="{ path: `/post/${post._id}` }">
               <button class="btn btn-muted read-more" type="button">
@@ -179,11 +200,17 @@ export default {
       },
       errorMessage: null,
       moment,
+      search: "",
     };
   },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
+    },
+    filteredPosts() {
+      return this.posts.filter((post) => {
+        return post.title.toLowerCase().match(this.search);
+      });
     },
   },
   mounted() {
@@ -363,5 +390,27 @@ textarea {
   align-items: center;
   flex-direction: column;
   row-gap: 1rem;
+}
+.search-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  column-gap: 2rem;
+}
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  column-gap: 1rem;
+}
+.catergory {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  column-gap: 1rem;
 }
 </style>
