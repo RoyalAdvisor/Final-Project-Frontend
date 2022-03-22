@@ -2,9 +2,6 @@
   <div class="post-wrapper" v-if="post">
     <header class="post-header">
       <h2>{{ post.title }}</h2>
-      <cite class="text-muted">
-        <span>{{ post.createdAt }}</span>
-      </cite>
     </header>
     <!-- LOADER -->
     <div v-if="loading">
@@ -12,9 +9,21 @@
         <Loader />
       </div>
     </div>
+    <!-- ERROR MESSAGE -->
+    <div>
+      <div class="error-container" v-if="!loading && errorMessage">
+        <h5>{{ errorMessage }}</h5>
+      </div>
+    </div>
     <div class="post-container">
+      <cite class="text-muted">
+        <span v-show="!loading && !errorMessage">Last updated:</span>
+        <span v-show="!loading && !errorMessage">
+          {{ moment(post.updatedAt).format("MMM DD, YYYY [at] HH:mm a") }}</span
+        >
+      </cite>
       <div class="post-image">
-        <img :src="post.main_image" :alt="post._id" />
+        <img :src="post.main_image" />
       </div>
       <article class="post-content">
         <h3>{{ post.subtitle }}</h3>
@@ -28,6 +37,7 @@
           class="btn btn-muted"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
+          v-if="currentUser.username == post.created_by"
         >
           Edit
         </button>
@@ -36,13 +46,14 @@
           class="btn btn-muted"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
+          v-if="currentUser.username == post.created_by"
         >
           Delete
         </button>
       </div>
     </div>
     <div class="comment-container">
-      <h5 v-if="currentUser">Comments</h5>
+      <h5 v-if="currentUser" v-show="!loading && !errorMessage">Comments</h5>
       <form class="row create-form" v-if="currentUser">
         <div class="text-container">
           <textarea
@@ -51,6 +62,7 @@
             id="comments"
             placeholder="Write a comment..."
             v-model="newComment"
+            v-show="!loading && !errorMessage"
           />
         </div>
         <div class="comment-btn" v-if="currentUser">
@@ -58,31 +70,35 @@
             class="btn btn-muted"
             @click.prevent="addComment(this.postId)"
             type="submit"
+            v-show="!loading && !errorMessage"
           >
             Post
           </button>
         </div>
       </form>
       <div class="comments-header">
-        <h5>Recent Comments</h5>
+        <h5 v-show="!loading && !errorMessage">Recent Comments</h5>
       </div>
       <div class="comments-wrapper">
         <div
           class="comments"
-          v-for="(comment, index) in post.comments"
+          v-for="comment in post.comments"
           :key="comment._id"
         >
           <div class="comment-info">
-            <h6>{{ comment.posted_by }}</h6>
-            <cite>{{ comment.content }}</cite>
-          </div>
-          <div class="comment-action" v-if="currentUser">
-            <button
-              class="btn btn-muted"
-              @click.prevent="deleteComment(this.postId, index)"
-            >
-              Delete
-            </button>
+            <div class="comment-content">
+              <h6>{{ comment.posted_by }}</h6>
+              <p class="comment-content">{{ comment.content }}</p>
+            </div>
+            <div class="comment-action" v-if="currentUser">
+              <button
+                class="btn btn-muted"
+                @click.prevent="deleteComment(this.postId, comment._id)"
+                v-if="currentUser.username == comment.posted_by"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -113,9 +129,9 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form class="row g-2 create-form">
+          <form class="row create-form">
             <div class="col-md-12">
-              <label for="main-image" class="form-label">Image</label>
+              <label for="main-image" class="form-label">Image *</label>
               <input
                 type="text"
                 v-model="updatedPost.main_image"
@@ -124,7 +140,7 @@
               />
             </div>
             <div class="col-md-12">
-              <label for="title" class="form-label">Title</label>
+              <label for="title" class="form-label">Title *</label>
               <input
                 type="text"
                 v-model="updatedPost.title"
@@ -134,7 +150,7 @@
               />
             </div>
             <div class="col-md-12">
-              <label for="subtitle" class="form-label">Subtitle</label>
+              <label for="subtitle" class="form-label">Subtitle *</label>
               <input
                 type="text"
                 v-model="updatedPost.subtitle"
@@ -144,7 +160,7 @@
               />
             </div>
             <div class="col-md-12">
-              <label for="catergory" class="form-label">Catergory</label>
+              <label for="catergory" class="form-label">Catergory *</label>
               <select
                 id="catergory"
                 class="form-select"
@@ -157,10 +173,8 @@
                 <option>Lifestyle</option>
               </select>
             </div>
-          </form>
-          <form class="row g-2 create-form">
             <div class="col-md-12">
-              <label for="desc" class="form-label">Desciption</label>
+              <label for="desc" class="form-label">Desciption *</label>
               <textarea
                 type="text"
                 v-model="updatedPost.desc"
@@ -168,6 +182,9 @@
                 id="desc"
                 required
               />
+              <div class="col-md-12 info-message">
+                <h6>Note: All fields marked with * are required.</h6>
+              </div>
             </div>
           </form>
         </div>
@@ -223,7 +240,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Close
+            Cancel
           </button>
           <button
             type="button"
@@ -243,6 +260,7 @@
 import axios from "axios";
 import PostService from "../services/post.service";
 import Loader from "../components/Loader.vue";
+import moment from "moment";
 const url = "https://final-blog-api.herokuapp.com/posts/";
 
 export default {
@@ -264,6 +282,7 @@ export default {
       },
       errorMessage: null,
       newComment: "",
+      moment,
     };
   },
   computed: {
@@ -272,17 +291,17 @@ export default {
     },
   },
   mounted() {
+    this.moment = moment;
     this.loading = true;
-    PostService.getOnePost(this.postId).then(
-      (res) => {
+    PostService.getOnePost(this.postId)
+      .then((res) => {
         this.post = res.data;
         this.loading = false;
-      },
-      (err) => {
-        this.errorMessage = err;
+      })
+      .catch((err) => {
+        this.errorMessage = `Oops. Seems like there was an error. Try refreshing this page.`;
         this.loading = false;
-      }
-    );
+      });
   },
   methods: {
     async deletePost(postId) {
@@ -307,16 +326,17 @@ export default {
             alert("The post was successfully deleted.");
           })
           .then(() => {
-            location.reload();
+            this.$router.push("/");
           });
       } catch (error) {
         console.error(error);
       }
     },
     async updatePost(postId) {
-      if (!localStorage.getItem("user")) {
-        alert("User not found");
-        return;
+      const postedBy = this.post.created_by;
+      const username = JSON.parse(localStorage.getItem("user")).username;
+      if (username !== postedBy) {
+        return alert("You cannot update this post!");
       }
       try {
         this.loading = true;
@@ -347,10 +367,6 @@ export default {
       }
     },
     async addComment(postId) {
-      if (!localStorage.getItem("user")) {
-        alert("User not found");
-        return;
-      }
       try {
         fetch(`${url}${postId}/comments/create`, {
           method: "POST",
@@ -373,27 +389,22 @@ export default {
         console.error(error);
       }
     },
-    async deleteComment(postId, index) {
-      if (!localStorage.getItem("user")) {
-        alert("User not found");
-        return;
-      }
-      const headers = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("user")).access
-          }`,
-        },
-      };
-      const deleteURL = `${url}${postId}/comments/delete`;
-      // let currentUser = JSON.parse(localStorage.getItem("user"))._id;
-      let comments = this.post.comments;
+    async deleteComment(postId, commentId) {
       try {
-        axios.delete(deleteURL, headers).then(() => {
-          comments.splice(index, 1);
-          location.reload;
-        });
+        fetch(`${url}${postId}/comments/delete/${commentId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).access
+            }`,
+          },
+        })
+          .then((res) => res.json())
+          .then(() => {
+            alert("Your comment has been deleted!");
+            location.reload();
+          });
       } catch (error) {
         console.error(error);
       }
@@ -477,15 +488,28 @@ textarea {
 }
 cite {
   display: flex;
-  width: 100%;
+  width: 50%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  font-family: "Cabin", sans-serif;
+  font-weight: 600;
+  padding: 0;
+  margin: 0;
+}
+.comment-content p {
   font-family: "Cabin", sans-serif;
   font-weight: 300;
 }
 .loading-container {
   margin-top: 20rem;
+}
+.error-container {
+  margin-top: 20rem;
+}
+.error-container h5 {
+  font-family: "Cabin", sans-serif;
+  font-weight: 600;
 }
 .update-btn {
   display: grid;
@@ -508,8 +532,22 @@ cite {
 .create-form {
   width: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  row-gap: 1rem;
+  row-gap: 0.5rem;
+  padding: 0;
+}
+.modal-body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0;
+}
+.info-message {
+  margin-top: 0.5rem;
 }
 .comments-wrapper {
   width: 100%;
@@ -524,8 +562,15 @@ cite {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   row-gap: 0.5rem;
+  width: 100%;
+}
+.comment-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
   width: 100%;
 }
 .comment-btn {

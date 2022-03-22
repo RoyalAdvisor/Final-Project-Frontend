@@ -12,22 +12,45 @@
           Create a new post
         </button>
       </div>
-      <div class="post-item shadow-sm" v-for="post in posts" :key="post._id">
+      <div
+        class="post-item shadow-sm"
+        v-for="post in posts.slice(0, count)"
+        :key="post._id"
+      >
+        <div class="formatted-date">
+          <cite class="text-muted">
+            <span v-show="!loading && !errorMessage" class="text-muted"
+              >Uploaded at:</span
+            >
+            {{ moment(post.createdAt).format("MMM DD, YYYY [at] HH:mm a") }}
+          </cite>
+        </div>
         <div class="post-image">
           <img :src="post.main_image" />
         </div>
         <div class="post-content">
           <h3>{{ post.title }}</h3>
           <h4>{{ post.subtitle }}</h4>
-          <cite class="text-muted"
-            ><span>By - </span>{{ post.created_by }}
-          </cite>
           <div class="buttons">
             <router-link :to="{ path: `/post/${post._id}` }">
-              <button class="btn btn-muted" type="button">Read More</button>
+              <button class="btn btn-muted read-more" type="button">
+                Read More...
+              </button>
             </router-link>
           </div>
         </div>
+      </div>
+      <div class="post-action">
+        <button class="btn" @click.prevent="loadMore()" :disabled="loading">
+          <span v-show="!loading">Load More</span>
+          <span v-show="loading"><Loader /></span>
+        </button>
+      </div>
+    </div>
+    <!-- ERROR MESSAGE -->
+    <div>
+      <div class="error-container" v-if="!loading && errorMessage">
+        <h5>{{ errorMessage }}</h5>
       </div>
     </div>
     <!-- LOADER -->
@@ -37,7 +60,6 @@
       </div>
     </div>
   </div>
-
   <!-- OFFCANVAS -->
   <div
     class="offcanvas offcanvas-bottom"
@@ -59,16 +81,17 @@
     <div class="offcanvas-body small">
       <form class="row g-2 create-form">
         <div class="col-md-12">
-          <label for="main-image" class="form-label">Image</label>
+          <label for="main-image" class="form-label">Image *</label>
           <input
             type="text"
             v-model="post.main_image"
             class="form-control"
             id="main-image"
           />
+          <h6>Recommended image resolution is 1280 x 800</h6>
         </div>
         <div class="col-md-12">
-          <label for="title" class="form-label">Title</label>
+          <label for="title" class="form-label">Title *</label>
           <input
             type="text"
             v-model="post.title"
@@ -78,7 +101,7 @@
           />
         </div>
         <div class="col-md-12">
-          <label for="subtitle" class="form-label">Subtitle</label>
+          <label for="subtitle" class="form-label">Subtitle *</label>
           <input
             type="text"
             v-model="post.subtitle"
@@ -88,7 +111,7 @@
           />
         </div>
         <div class="col-md-12">
-          <label for="catergory" class="form-label">Catergory</label>
+          <label for="catergory" class="form-label">Catergory *</label>
           <select
             id="catergory"
             class="form-select"
@@ -101,7 +124,7 @@
             <option>Lifestyle</option>
           </select>
         </div>
-        <div class="col-12">
+        <div class="col-12 submission">
           <button
             type="submit"
             class="btn btn-muted"
@@ -110,11 +133,14 @@
           >
             Submit
           </button>
+          <div class="col-12">
+            <h6>Note: All fields marked with * are required.</h6>
+          </div>
         </div>
       </form>
       <form class="row create-form">
         <div class="col-md-12">
-          <label for="desc" class="form-label">Desciption</label>
+          <label for="desc" class="form-label">Desciption *</label>
           <textarea
             type="text"
             v-model="post.desc"
@@ -131,6 +157,7 @@
 <script>
 import PostService from "../services/post.service";
 import Loader from "./Loader.vue";
+import moment from "moment";
 const url = "https://final-blog-api.herokuapp.com/posts/";
 export default {
   name: "Posts",
@@ -141,6 +168,7 @@ export default {
     return {
       loading: false,
       posts: [],
+      count: 2,
       post: {
         main_image: "",
         title: "",
@@ -150,6 +178,7 @@ export default {
         created_by: "",
       },
       errorMessage: null,
+      moment,
     };
   },
   computed: {
@@ -159,23 +188,18 @@ export default {
   },
   mounted() {
     this.loading = true;
-    PostService.getAllPosts().then(
-      (res) => {
+    PostService.getAllPosts()
+      .then((res) => {
         this.posts = res.data;
         this.loading = false;
-      },
-      (err) => {
-        this.errorMessage = err;
+      })
+      .catch((err) => {
+        this.errorMessage = `Oops. Seems like there was an error. Try refreshing this page.`;
         this.loading = false;
-      }
-    );
+      });
   },
   methods: {
     async addPost() {
-      if (!localStorage.getItem("user")) {
-        alert("User not found");
-        return;
-      }
       try {
         fetch(`${url}create`, {
           method: "POST",
@@ -202,6 +226,11 @@ export default {
         console.error(error);
       }
     },
+    loadMore() {
+      this.loading = true;
+      this.count += 2;
+      this.loading = false;
+    },
   },
 };
 </script>
@@ -221,7 +250,7 @@ export default {
   justify-content: center;
   align-items: center;
   width: 80%;
-  row-gap: 2rem;
+  row-gap: 3rem;
 }
 .post-item {
   display: flex;
@@ -258,17 +287,36 @@ h4 {
   padding: 0;
 }
 cite {
-  font-size: 15px;
-  font-weight: 200;
-  margin: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Cabin", sans-serif;
+  font-weight: 600;
+  padding: 5px 20px 0px 20px;
+}
+label {
+  font-size: 20px;
+}
+.username {
   padding: 0;
+}
+.formatted-date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 .buttons {
   width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  flex-direction: row;
+  padding: 0;
+}
+.read-more {
+  padding: 0;
 }
 /* OFFCANVAS */
 .offcanvas-bottom {
@@ -301,5 +349,19 @@ textarea {
 }
 .loading-container {
   margin-top: 20rem;
+}
+.error-container {
+  margin-top: 20rem;
+}
+.error-container h5 {
+  font-family: "Cabin", sans-serif;
+  font-weight: 600;
+}
+.submission {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 1rem;
 }
 </style>

@@ -2,7 +2,7 @@
   <section class="landing-section">
     <header class="landing-header">
       <h2>THE MENTAL MIND</h2>
-      <h4>Welcome to The Mental Mind Blog</h4>
+      <h4>Discover | Activate | Surpass</h4>
     </header>
   </section>
 </template>
@@ -19,7 +19,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 30vh;
+  min-height: 40vh;
   margin: 0;
   padding: 0;
 }
@@ -28,7 +28,7 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 50%;
+  width: 100%;
 }
 .landing-header h2 {
   font-size: 60px;

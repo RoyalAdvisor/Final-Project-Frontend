@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="profile-container">
-      <div class="user-info shadow">
+      <div class="user-info shadow-sm">
         <div class="user-svg">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path
@@ -18,12 +18,143 @@
           </svg>
         </div>
         <div class="info-item">
-          <h3>Name:</h3>
+          <h5>Name:</h5>
           <span>{{ currentUser.username }}</span>
         </div>
         <div class="info-item">
-          <h3>Email:</h3>
+          <h5>Email:</h5>
           <span>{{ currentUser.email }}</span>
+        </div>
+        <div class="user-actions">
+          <button
+            type="button"
+            class="btn btn-muted"
+            data-bs-toggle="modal"
+            data-bs-target="#updateUser"
+          >
+            Update Profile
+          </button>
+          <button
+            type="button"
+            class="btn btn-muted"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteUser"
+          >
+            Delete Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update User Modal -->
+  <div
+    class="modal fade"
+    id="updateUser"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Update profile.</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form class="row g-2 create-form">
+            <div class="col-md-12">
+              <label for="username" class="form-label">Username</label>
+              <input
+                type="text"
+                v-model="updatedUser.username"
+                class="form-control"
+                id="username"
+                required
+              />
+            </div>
+            <div class="col-md-12">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="text"
+                v-model="updatedUser.email"
+                class="form-control"
+                id="email"
+                required
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-muted"
+            data-bs-dismiss="modal"
+            @click.prevent="updateUser(this.currentUser._id)"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete User Modal -->
+  <div
+    class="modal fade"
+    id="deleteUser"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">
+            Are you sure you want to delete your profile?
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <h6>This cannot be undone</h6>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+            @click.prevent="deleteUser(this.currentUser._id)"
+          >
+            Understood
+          </button>
         </div>
       </div>
     </div>
@@ -31,7 +162,9 @@
 </template>
 
 <script>
+const url = "https://final-blog-api.herokuapp.com/users/";
 import Loader from "../components/Loader.vue";
+import axios from "axios";
 export default {
   name: "Profile",
   components: {
@@ -44,9 +177,60 @@ export default {
   },
   data() {
     return {
+      updatedUser: {
+        username: "",
+        email: "",
+      },
       loading: false,
       errorMessage: null,
     };
+  },
+  methods: {
+    async updateUser(userId) {
+      try {
+        fetch(`${url}${userId}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            username: this.updatedUser.username,
+            email: this.updatedUser.email,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).access
+            }`,
+          },
+        })
+          .then((res) => res.json())
+          .then(() => {
+            alert("Your profile has been updated successfully!");
+            this.$store.dispatch("auth/logout");
+            this.$router.push("/signin");
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteUser(userId) {
+      const headers = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).access
+          }`,
+        },
+      };
+      const new_url = `${url}${userId}`;
+      try {
+        await axios.delete(new_url, headers, this.currentUser).then(() => {
+          alert("Profile has been deleted!");
+          this.$store.dispatch("auth/logout");
+          this.$router.push("/signin");
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
 </script>
@@ -69,6 +253,7 @@ export default {
   width: 70%;
 }
 .profile-header h2 {
+  margin-top: 1rem;
   font-size: 60px;
   font-weight: 700;
 }
@@ -81,7 +266,7 @@ export default {
   margin: 3rem 0;
 }
 .user-info {
-  width: 50%;
+  width: 40%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,6 +280,17 @@ export default {
   width: 100%;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+.user-actions {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  column-gap: 1rem;
+}
+.user-actions button {
+  padding: 0;
 }
 .user-svg {
   display: flex;
