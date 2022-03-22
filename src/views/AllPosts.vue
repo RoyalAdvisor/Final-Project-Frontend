@@ -1,35 +1,29 @@
 <template>
   <div class="home-wrapper">
     <div class="home-container">
-      <div v-if="currentUser">
-        <button
-          class="btn btn-primary"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasBottom"
-          aria-controls="offcanvasBottom"
-        >
-          Create a new post
-        </button>
-      </div>
-      <div class="search-actions">
-        <div class="search">
-          <label for="search">Search:</label>
-          <input
-            type="text"
-            v-model="search"
-            name="search"
-            placeholder="Find blogs..."
-          />
+      <div class="user-actions">
+        <div v-if="currentUser" class="create-post">
+          <button
+            class="create-btn shadow-sm"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasBottom"
+            aria-controls="offcanvasBottom"
+          >
+            Create a new post
+          </button>
         </div>
-        <div class="catergory">
-          <label for="sort-by-catergory">Sort by:</label>
-          <select name="sort-by-catergory" id="catergory">
-            <option value="...">Select Catergory</option>
-            <option value="Motivational">Motivational</option>
-            <option value="Art">Art</option>
-            <option value="Lifestyle">Lifestyle</option>
-          </select>
+        <div class="search-actions">
+          <div class="search">
+            <label for="search">Search</label>
+            <input
+              type="text"
+              v-model="search"
+              name="search"
+              placeholder="Find blogs..."
+              class="search-bar shadow"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -51,18 +45,19 @@
         <div class="post-content">
           <h3>{{ post.title }}</h3>
           <h4>{{ post.subtitle }}</h4>
-          <h6 class="text-muted">{{ post.created_by }}</h6>
           <div class="buttons">
             <router-link :to="{ path: `/post/${post._id}` }">
-              <button class="btn btn-muted read-more" type="button">
-                Read More...
-              </button>
+              <button class="read-btn" type="button">Read More...</button>
             </router-link>
           </div>
         </div>
       </div>
       <div class="post-action">
-        <button class="btn" @click.prevent="loadMore()" :disabled="loading">
+        <button
+          class="load-btn shadow"
+          @click.prevent="loadMore()"
+          :disabled="loading"
+        >
           <span v-show="!loading">Load More</span>
           <span v-show="loading"><Loader /></span>
         </button>
@@ -109,7 +104,7 @@
             class="form-control"
             id="main-image"
           />
-          <h6>Recommended image resolution is 1280 x 800</h6>
+          <h6 class="mt-1">Recommended image resolution is 1280 x 800</h6>
         </div>
         <div class="col-md-12">
           <label for="title" class="form-label">Title *</label>
@@ -148,7 +143,7 @@
         <div class="col-12 submission">
           <button
             type="submit"
-            class="btn btn-muted"
+            class="submit-btn"
             @click.prevent="addPost()"
             data-bs-dismiss="offcanvas"
           >
@@ -177,11 +172,11 @@
 
 <script>
 import PostService from "../services/post.service";
-import Loader from "./Loader.vue";
+import Loader from "../components/Loader.vue";
 import moment from "moment";
 const url = "https://final-blog-api.herokuapp.com/posts/";
 export default {
-  name: "Posts",
+  name: "AllPosts",
   components: {
     Loader,
   },
@@ -201,6 +196,7 @@ export default {
       errorMessage: null,
       moment,
       search: "",
+      catergory: "",
     };
   },
   computed: {
@@ -269,19 +265,19 @@ export default {
   width: 100%;
   justify-content: center;
   align-items: center;
-  margin: 3rem 0;
+  margin: 5rem 0;
 }
 .home-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 100%;
   row-gap: 3rem;
 }
 .post-item {
   display: flex;
-  width: 60%;
+  width: 1000px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -342,9 +338,6 @@ label {
   align-items: center;
   padding: 0;
 }
-.read-more {
-  padding: 0;
-}
 /* OFFCANVAS */
 .offcanvas-bottom {
   min-height: 55vh;
@@ -372,7 +365,7 @@ label {
   flex-basis: 100%;
 }
 textarea {
-  min-height: 264px;
+  min-height: 322px;
 }
 .loading-container {
   margin-top: 20rem;
@@ -406,11 +399,130 @@ textarea {
   flex-direction: row;
   column-gap: 1rem;
 }
-.catergory {
+.create-post {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   column-gap: 1rem;
+}
+.create-btn {
+  min-width: 200px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.create-btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+.load-btn {
+  min-width: 200px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.load-btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+.read-btn {
+  min-width: 120px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  background: none;
+  color: rgba(0, 0, 0, 0.95);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.95);
+}
+.submit-btn {
+  min-width: 200px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.submit-btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+.user-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  row-gap: 2rem;
+  flex-direction: column-reverse;
+}
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+.search-bar {
+  min-width: 200px;
+  padding: 10px;
+  border: none;
+}
+@media only screen and (max-width: 1100px) {
+  .home-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 5rem 0;
+  }
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    row-gap: 3rem;
+  }
+  .post-item {
+    display: flex;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 0.5rem;
+  }
+}
+@media only screen and (max-width: 576px) {
+  .home-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 5rem 0;
+  }
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    row-gap: 3rem;
+  }
+  .post-item {
+    display: flex;
+    width: 95%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 0.5rem;
+  }
 }
 </style>

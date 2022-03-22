@@ -14,17 +14,17 @@ export default {
 
 <style scoped>
 .blog-footer {
-  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #1f1f1f;
-  margin-top: 5rem;
+  background-color: rgba(0, 0, 0, 0.95);
   position: fixed;
   bottom: 0;
+  margin-top: 5rem;
   width: 100%;
 }
 h6 {
   color: #fff;
+  padding: 10px;
 }
 </style>

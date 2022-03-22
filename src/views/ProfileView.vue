@@ -28,24 +28,25 @@
         <div class="user-actions">
           <button
             type="button"
-            class="btn btn-muted"
+            class="update-profile-btn"
             data-bs-toggle="modal"
             data-bs-target="#updateUser"
           >
-            Update Profile
+            Update
           </button>
           <button
             type="button"
-            class="btn btn-muted"
+            class="delete-profile-btn"
             data-bs-toggle="modal"
             data-bs-target="#deleteUser"
           >
-            Delete Profile
+            Delete
           </button>
         </div>
       </div>
     </div>
   </div>
+  <Footer />
 
   <!-- Update User Modal -->
   <div
@@ -95,14 +96,14 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn btn-secondary"
+            class="delete-profile-btn"
             data-bs-dismiss="modal"
           >
             Cancel
           </button>
           <button
             type="button"
-            class="btn btn-muted"
+            class="update-profile-btn"
             data-bs-dismiss="modal"
             @click.prevent="updateUser(this.currentUser._id)"
           >
@@ -142,14 +143,14 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn btn-secondary"
+            class="update-profile-btn"
             data-bs-dismiss="modal"
           >
-            Close
+            Cancel
           </button>
           <button
             type="button"
-            class="btn btn-danger"
+            class="delete-profile-btn"
             data-bs-dismiss="modal"
             @click.prevent="deleteUser(this.currentUser._id)"
           >
@@ -164,11 +165,13 @@
 <script>
 const url = "https://final-blog-api.herokuapp.com/users/";
 import Loader from "../components/Loader.vue";
+import Footer from "../components/Footer.vue";
 import axios from "axios";
 export default {
   name: "Profile",
   components: {
     Loader,
+    Footer,
   },
   computed: {
     currentUser() {
@@ -244,6 +247,7 @@ export default {
   margin: 3rem 0;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 .profile-header {
   display: flex;
@@ -253,7 +257,6 @@ export default {
   width: 70%;
 }
 .profile-header h2 {
-  margin-top: 1rem;
   font-size: 60px;
   font-weight: 700;
 }
@@ -266,13 +269,14 @@ export default {
   margin: 3rem 0;
 }
 .user-info {
-  width: 40%;
+  width: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   row-gap: 1rem;
   padding: 20px;
+  margin: 3rem 0;
 }
 .info-item {
   display: flex;
@@ -289,9 +293,6 @@ export default {
   flex-wrap: wrap;
   column-gap: 1rem;
 }
-.user-actions button {
-  padding: 0;
-}
 .user-svg {
   display: flex;
   justify-content: center;
@@ -301,7 +302,46 @@ export default {
 .user-svg svg {
   min-width: 30%;
 }
-.loading-container {
-  margin-top: 20rem;
+.update-profile-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.update-profile-btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+.delete-profile-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.delete-profile-btn:hover {
+  background: red;
+  color: #fff;
+}
+@media only screen and (max-width: 750px) {
+  .profile-header h2 {
+    font-size: 35px;
+    font-weight: 700;
+  }
+  .user-info {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 20px;
+    margin: 3rem 0;
+  }
 }
 </style>

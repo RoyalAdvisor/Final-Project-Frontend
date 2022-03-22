@@ -3,7 +3,7 @@
     <header class="form-header">
       <h2>Sign In</h2>
     </header>
-    <div class="form-container shadow">
+    <div class="form-container shadow-sm">
       <div class="form-image">
         <img src="../assets/signin.jpg" alt="man-typing" />
       </div>
@@ -48,12 +48,14 @@
       </Form>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import Loader from "./Loader.vue";
+import Loader from "../components/Loader.vue";
+import Footer from "../components/Footer.vue";
 export default {
   name: "SignIn",
   components: {
@@ -61,6 +63,7 @@ export default {
     Field,
     ErrorMessage,
     Loader,
+    Footer,
   },
   data() {
     const signInSchema = yup.object().shape({
@@ -112,6 +115,7 @@ export default {
   margin: 3rem 0;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 .form-header h2 {
   font-size: 60px;
@@ -129,7 +133,7 @@ export default {
   justify-content: center;
   flex-direction: row-reverse;
   align-items: center;
-  max-width: 50%;
+  max-width: 600px;
   padding: 0;
   margin: 3rem 0;
 }
@@ -167,5 +171,20 @@ Form {
   padding: 20px;
   border: 1px solid red;
   border-radius: 10px;
+}
+@media only screen and (max-width: 750px) {
+  .form-header h2 {
+    font-size: 35px;
+    font-weight: 700;
+  }
+  .form-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row-reverse;
+    align-items: center;
+    max-width: 95%;
+    padding: 0;
+    margin: 3rem 0;
+  }
 }
 </style>

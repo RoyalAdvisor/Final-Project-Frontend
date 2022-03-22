@@ -13,10 +13,15 @@
       </p>
     </article>
   </div>
+  <Footer />
 </template>
 <script>
+import Footer from "../components/Footer.vue";
 export default {
   name: "DeleteProfileSuccess",
+  components: {
+    Footer,
+  },
 };
 </script>
 
@@ -29,12 +34,29 @@ export default {
   margin: 3rem 0;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 .success-content {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  width: 50%;
+  max-width: 600px;
+}
+@media only screen and (max-width: 750px) {
+  .form-header h2 {
+    font-size: 35px;
+    font-weight: 700;
+  }
+  .success-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 95%;
+    margin: 3rem 0;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
 }
 </style>

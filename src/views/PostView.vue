@@ -16,15 +16,15 @@
       </div>
     </div>
     <div class="post-container">
+      <div class="post-image">
+        <img :src="post.main_image" />
+      </div>
       <cite class="text-muted">
         <span v-show="!loading && !errorMessage">Last updated:</span>
         <span v-show="!loading && !errorMessage">
           {{ moment(post.updatedAt).format("MMM DD, YYYY [at] HH:mm a") }}</span
         >
       </cite>
-      <div class="post-image">
-        <img :src="post.main_image" />
-      </div>
       <article class="post-content">
         <h3>{{ post.subtitle }}</h3>
         <p>
@@ -34,7 +34,7 @@
       <div class="action-buttons" v-if="currentUser">
         <button
           type="button"
-          class="btn btn-muted"
+          class="edit-btn"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
           v-if="currentUser.username == post.created_by"
@@ -43,7 +43,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-muted"
+          class="delete-btn"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
           v-if="currentUser.username == post.created_by"
@@ -67,7 +67,7 @@
         </div>
         <div class="comment-btn" v-if="currentUser">
           <button
-            class="btn btn-muted"
+            class="comment-post-btn"
             @click.prevent="addComment(this.postId)"
             type="submit"
             v-show="!loading && !errorMessage"
@@ -92,7 +92,7 @@
             </div>
             <div class="comment-action" v-if="currentUser">
               <button
-                class="btn btn-muted"
+                class="comment-delete-btn"
                 @click.prevent="deleteComment(this.postId, comment._id)"
                 v-if="currentUser.username == comment.posted_by"
               >
@@ -107,6 +107,7 @@
       </div>
     </div>
   </div>
+  <Footer />
 
   <!-- EDIT MODAL -->
 
@@ -131,7 +132,7 @@
         <div class="modal-body">
           <form class="row create-form">
             <div class="col-md-12">
-              <label for="main-image" class="form-label">Image *</label>
+              <label for="main-image" class="form-label mt-1">Image *</label>
               <input
                 type="text"
                 v-model="updatedPost.main_image"
@@ -189,21 +190,17 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Close
+          <button type="button" class="cancel-btn" data-bs-dismiss="modal">
+            Cancel
           </button>
           <button
             type="button"
             @click.prevent="updatePost(this.postId)"
-            class="btn btn-muted update-btn"
+            class="update-btn"
             :disabled="loading"
             data-bs-dismiss="modal"
           >
-            <span v-show="!loading">Save</span>
+            <span v-show="!loading">Update</span>
             <span v-show="loading"> <Loader /> </span>
           </button>
         </div>
@@ -244,7 +241,7 @@
           </button>
           <button
             type="button"
-            class="btn btn-danger"
+            class="delete-btn"
             @click.prevent="deletePost(this.postId)"
             data-bs-dismiss="modal"
           >
@@ -260,6 +257,7 @@
 import axios from "axios";
 import PostService from "../services/post.service";
 import Loader from "../components/Loader.vue";
+import Footer from "../components/Footer.vue";
 import moment from "moment";
 const url = "https://final-blog-api.herokuapp.com/posts/";
 
@@ -267,6 +265,7 @@ export default {
   name: "Postview",
   components: {
     Loader,
+    Footer,
   },
   data() {
     return {
@@ -419,16 +418,17 @@ export default {
   flex-direction: column;
   row-gap: 1rem;
   width: 100%;
-  margin: 3rem 0;
+  margin: 5rem 0;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 .post-header {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  width: 50%;
+  max-width: 1000px;
   margin-top: 1rem;
 }
 .post-header h2 {
@@ -447,11 +447,11 @@ export default {
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  width: 50%;
+  max-width: 1000px;
   row-gap: 1rem;
 }
 .post-image {
-  width: 50%;
+  max-width: 1000px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -470,10 +470,10 @@ export default {
 }
 .action-buttons {
   display: flex;
-  width: 50%;
+  width: 1000px;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 20px;
+  column-gap: 1rem;
 }
 .form-control {
   display: flex;
@@ -485,12 +485,14 @@ export default {
 }
 textarea {
   min-height: 264px;
+  padding: 10px;
 }
 cite {
   display: flex;
-  width: 50%;
+  max-width: 1000px;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+  column-gap: 2rem;
   align-items: center;
   font-family: "Cabin", sans-serif;
   font-weight: 600;
@@ -511,12 +513,9 @@ cite {
   font-family: "Cabin", sans-serif;
   font-weight: 600;
 }
-.update-btn {
-  display: grid;
-  place-items: center;
-}
 .comment-container {
-  width: 50%;
+  width: 1000px;
+  min-width: 20%;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -574,6 +573,270 @@ cite {
   width: 100%;
 }
 .comment-btn {
-  padding-left: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.comment-post-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.comment-post-btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+.comment-delete-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.comment-delete-btn:hover {
+  background: red;
+  color: #fff;
+}
+.edit-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.edit-btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+.delete-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.delete-btn:hover {
+  background: red;
+  color: #fff;
+}
+.cancel-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.cancel-btn:hover {
+  background: red;
+  color: #fff;
+}
+.update-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.update-btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+@media only screen and (max-width: 1100px) {
+  .post-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 100%;
+    margin: 5rem 0;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .post-header {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    max-width: 90%;
+    margin-top: 1rem;
+  }
+  .post-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    max-width: 90%;
+    row-gap: 1rem;
+  }
+  .post-image {
+    max-width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .post-image img {
+    width: 100%;
+    object-fit: cover;
+  }
+  .post-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    row-gap: 1rem;
+  }
+  .action-buttons {
+    display: flex;
+    width: 90%;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1rem;
+  }
+  .comments-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 20px;
+  }
+  .comments {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 0.5rem;
+    width: 100%;
+  }
+  .comment-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+  }
+  .comment-container {
+    width: 90%;
+    min-width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    row-gap: 1rem;
+    margin: 3rem 0;
+    padding: 20px;
+  }
+}
+@media only screen and (max-width: 576px) {
+  .post-header h2 {
+    font-size: 35px;
+    font-weight: 700;
+  }
+  .post-content h3 {
+    font-size: 25px;
+    font-weight: 700;
+  }
+  .post-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 100%;
+    margin: 5rem 0;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .post-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-width: 95%;
+    margin-top: 1rem;
+  }
+  .post-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    max-width: 100%;
+    padding: 0;
+    row-gap: 1rem;
+  }
+  .post-image {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .post-image img {
+    width: 100%;
+    object-fit: cover;
+  }
+  .post-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    row-gap: 1rem;
+  }
+  .action-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1rem;
+  }
+  .comments-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 20px;
+  }
+  .comments {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 0.5rem;
+    width: 100%;
+  }
+  .comment-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+  }
+  .comment-container {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    row-gap: 1rem;
+    margin: 3rem 0;
+    padding: 0;
+  }
 }
 </style>
