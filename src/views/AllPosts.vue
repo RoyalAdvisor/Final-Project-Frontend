@@ -6,11 +6,10 @@
           <button
             class="create-btn shadow-sm"
             type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasBottom"
-            aria-controls="offcanvasBottom"
+            data-bs-toggle="modal"
+            data-bs-target="#updateModal"
           >
-            Create a new post
+            Create new blog
           </button>
         </div>
         <div class="search-actions">
@@ -27,7 +26,7 @@
         </div>
       </div>
       <div
-        class="post-item shadow-sm"
+        class="post-item shadow"
         v-for="post in filteredPosts.slice(0, count)"
         :key="post._id"
       >
@@ -36,7 +35,7 @@
             <span v-show="!loading && !errorMessage" class="text-muted"
               >Uploaded at:</span
             >
-            {{ moment(post.createdAt).format("MMM DD, YYYY [at] HH:mm a") }}
+            {{ moment(post.createdAt).format("MMM DD, YYYY") }}
           </cite>
         </div>
         <div class="post-image">
@@ -52,14 +51,13 @@
           </div>
         </div>
       </div>
-      <div class="post-action">
+      <div class="post-action" :disabled="loading">
         <button
           class="load-btn shadow"
           @click.prevent="loadMore()"
-          :disabled="loading"
+          v-show="!loading && !errorMessage"
         >
-          <span v-show="!loading">Load More</span>
-          <span v-show="loading"><Loader /></span>
+          Load More
         </button>
       </div>
     </div>
@@ -76,96 +74,94 @@
       </div>
     </div>
   </div>
-  <!-- OFFCANVAS -->
+
+  <!-- CREATE MODAL -->
+
+  <!-- Button trigger modal -->
+
   <div
-    class="offcanvas offcanvas-bottom"
+    class="modal fade"
+    id="updateModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
     tabindex="-1"
-    id="offcanvasBottom"
-    aria-labelledby="offcanvasBottomLabel"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
   >
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasBottomLabel">
-        Create a blog post
-      </h5>
-      <button
-        type="button"
-        class="btn-close text-reset"
-        data-bs-dismiss="offcanvas"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="offcanvas-body small">
-      <form class="row g-2 create-form">
-        <div class="col-md-12">
-          <label for="main-image" class="form-label">Image *</label>
-          <input
-            type="text"
-            v-model="post.main_image"
-            class="form-control"
-            id="main-image"
-          />
-          <h6 class="mt-1">Recommended image resolution is 1280 x 800</h6>
-        </div>
-        <div class="col-md-12">
-          <label for="title" class="form-label">Title *</label>
-          <input
-            type="text"
-            v-model="post.title"
-            class="form-control"
-            id="title"
-            required
-          />
-        </div>
-        <div class="col-md-12">
-          <label for="subtitle" class="form-label">Subtitle *</label>
-          <input
-            type="text"
-            v-model="post.subtitle"
-            class="form-control"
-            id="subtitle"
-            required
-          />
-        </div>
-        <div class="col-md-12">
-          <label for="catergory" class="form-label">Catergory *</label>
-          <select
-            id="catergory"
-            class="form-select"
-            v-model="post.catergory"
-            required
-          >
-            <option selected>Choose...</option>
-            <option>Motivation</option>
-            <option>Art</option>
-            <option>Lifestyle</option>
-          </select>
-        </div>
-        <div class="col-12 submission">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">
+            Create a new blog post.
+          </h5>
           <button
-            type="submit"
-            class="submit-btn"
-            @click.prevent="addPost()"
-            data-bs-dismiss="offcanvas"
-          >
-            Submit
-          </button>
-          <div class="col-12">
-            <h6>Note: All fields marked with * are required.</h6>
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form class="row create-form">
+            <div class="col-md-12">
+              <label for="main-image" class="form-label mt-1">Image *</label>
+              <input
+                type="text"
+                v-model="post.main_image"
+                class="form-control"
+                id="main-image"
+              />
+            </div>
+            <div class="col-md-12">
+              <label for="title" class="form-label">Title *</label>
+              <input
+                type="text"
+                v-model="post.title"
+                class="form-control"
+                id="title"
+                required
+              />
+            </div>
+            <div class="col-md-12">
+              <label for="subtitle" class="form-label">Subtitle *</label>
+              <input
+                type="text"
+                v-model="post.subtitle"
+                class="form-control"
+                id="subtitle"
+                required
+              />
+            </div>
+            <div class="col-md-12">
+              <label for="desc" class="form-label">Content *</label>
+              <textarea
+                type="text"
+                v-model="post.desc"
+                class="form-control"
+                id="desc"
+                required
+              />
+              <div class="col-md-12 info-message">
+                <h6>Note: All fields marked with * are required.</h6>
+              </div>
+            </div>
+          </form>
+          <div class="modal-footer">
+            <button type="button" class="cancel-btn" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="submit-btn"
+              :disabled="loading"
+              @click.prevent="addPost()"
+            >
+              <span v-show="!loading">Create</span>
+              <span v-show="loading">Loading...</span>
+            </button>
           </div>
         </div>
-      </form>
-      <form class="row create-form">
-        <div class="col-md-12">
-          <label for="desc" class="form-label">Desciption *</label>
-          <textarea
-            type="text"
-            v-model="post.desc"
-            class="form-control"
-            id="desc"
-            required
-          />
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -189,14 +185,12 @@ export default {
         main_image: "",
         title: "",
         subtitle: "",
-        catergory: "",
         desc: "",
         created_by: "",
       },
       errorMessage: null,
       moment,
       search: "",
-      catergory: "",
     };
   },
   computed: {
@@ -242,7 +236,6 @@ export default {
         })
           .then((res) => res.json())
           .then(() => {
-            alert("Your post has been created!");
             location.reload();
           });
       } catch (error) {
@@ -319,8 +312,12 @@ cite {
   font-weight: 600;
   padding: 5px 20px 0px 20px;
 }
-label {
-  font-size: 20px;
+.info-message {
+  margin-top: 0.5rem;
+}
+textarea {
+  min-height: 264px;
+  padding: 10px;
 }
 .username {
   padding: 0;
@@ -338,35 +335,6 @@ label {
   align-items: center;
   padding: 0;
 }
-/* OFFCANVAS */
-.offcanvas-bottom {
-  min-height: 55vh;
-  overflow-y: scroll;
-}
-.create-form {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
-  flex-basis: 50%;
-  padding: 0;
-}
-.offcanvas-body {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-basis: 100%;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.form-control {
-  display: flex;
-  flex-basis: 100%;
-}
-textarea {
-  min-height: 322px;
-}
 .loading-container {
   margin-top: 20rem;
 }
@@ -376,6 +344,11 @@ textarea {
 .error-container h5 {
   font-family: "Cabin", sans-serif;
   font-weight: 600;
+}
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 .submission {
   display: flex;
@@ -442,7 +415,7 @@ textarea {
   border-bottom: 2px solid rgba(0, 0, 0, 0.95);
 }
 .submit-btn {
-  min-width: 200px;
+  min-width: 120px;
   padding: 10px;
   outline: none;
   border: none;
@@ -452,6 +425,19 @@ textarea {
 }
 .submit-btn:hover {
   background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+.cancel-btn {
+  min-width: 120px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.cancel-btn:hover {
+  background: red;
   color: #fff;
 }
 .user-actions {
@@ -473,40 +459,56 @@ textarea {
   padding: 10px;
   border: none;
 }
-@media only screen and (max-width: 1100px) {
-  .home-wrapper {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    margin: 5rem 0;
-  }
-  .home-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    row-gap: 3rem;
-  }
-  .post-item {
-    display: flex;
-    width: 90%;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    row-gap: 0.5rem;
-  }
+.modal-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
-@media only screen and (max-width: 576px) {
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 98%;
+  margin: 0;
+  padding: 0;
+}
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.col input {
+  width: 100%;
+}
+@media only screen and (max-width: 770px) {
   .home-wrapper {
     display: flex;
     flex-direction: column;
     width: 100%;
     justify-content: center;
     align-items: center;
-    margin: 5rem 0;
+    margin-top: 3rem;
+    margin-bottom: 5rem;
   }
   .home-container {
     display: flex;
@@ -518,11 +520,77 @@ textarea {
   }
   .post-item {
     display: flex;
-    width: 95%;
+    width: 98%;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     row-gap: 0.5rem;
+  }
+  h3 {
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+  }
+  h4 {
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+  }
+  cite {
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .read-btn {
+    width: 60px;
+    font-size: 12px;
+    padding: 10px;
+    outline: none;
+    border: none;
+    background: none;
+    color: rgba(0, 0, 0, 0.95);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.95);
+  }
+  .load-btn {
+    min-width: 150px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    background: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    transition: ease-in-out 500ms;
+  }
+  .create-btn {
+    min-width: 150px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    background: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    transition: ease-in-out 500ms;
+  }
+  .submit-btn {
+    min-width: 80px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    background: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    transition: ease-in-out 500ms;
+  }
+  .cancel-btn {
+    min-width: 80px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    background: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    transition: ease-in-out 500ms;
+  }
+  .search-bar {
+    min-width: 300px;
+    padding: 10px;
+    border: none;
   }
 }
 </style>

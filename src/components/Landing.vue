@@ -34,7 +34,7 @@ export default {
   flex-direction: column;
   width: 100%;
   min-height: 50vh;
-  background: rgba(0, 0, 0, 80%);
+  background: rgba(0, 0, 0, 85%);
 }
 .landing-header h2 {
   font-size: 60px;
@@ -44,7 +44,7 @@ export default {
 .landing-header h4 {
   color: #fff;
 }
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 770px) {
   .landing-header {
     display: flex;
     justify-content: center;

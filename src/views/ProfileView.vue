@@ -3,50 +3,66 @@
     <header class="profile-header">
       <h2>Profile</h2>
     </header>
-    <div v-if="loading">
-      <div class="loading-container">
-        <Loader />
-      </div>
-    </div>
     <div class="profile-container">
-      <div class="user-info shadow-sm">
-        <div class="user-svg">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <div class="card shadow">
+        <div class="card-image">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            class="bi bi-person-circle"
+            viewBox="0 0 16 16"
+          >
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
             <path
-              d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c39.77 0 72 32.24 72 72S295.8 272 256 272c-39.76 0-72-32.24-72-72S216.2 128 256 128zM256 448c-52.93 0-100.9-21.53-135.7-56.29C136.5 349.9 176.5 320 224 320h64c47.54 0 87.54 29.88 103.7 71.71C356.9 426.5 308.9 448 256 448z"
+              fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
             />
           </svg>
         </div>
-        <div class="info-item">
-          <h5>Name:</h5>
-          <span>{{ currentUser.username }}</span>
-        </div>
-        <div class="info-item">
+        <hr />
+        <div class="card-body">
+          <h2 class="card-title">User Info</h2>
+          <h5>Status:</h5>
+          <p class="card-text" style="color: green">Online</p>
+          <h5>UserID:</h5>
+          <p class="card-text">
+            {{ currentUser._id }}
+          </p>
+          <h5>Username:</h5>
+          <p class="card-text">
+            {{ currentUser.username }}
+          </p>
           <h5>Email:</h5>
-          <span>{{ currentUser.email }}</span>
-        </div>
-        <div class="user-actions">
-          <button
-            type="button"
-            class="update-profile-btn"
-            data-bs-toggle="modal"
-            data-bs-target="#updateUser"
-          >
-            Update
-          </button>
-          <button
-            type="button"
-            class="delete-profile-btn"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteUser"
-          >
-            Delete
-          </button>
+          <p class="card-text">
+            {{ currentUser.email }}
+          </p>
+          <div class="user-actions">
+            <button
+              type="button"
+              class="update-profile-btn"
+              data-bs-toggle="modal"
+              data-bs-target="#updateUser"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              class="delete-profile-btn"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteUser"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <Footer />
+  <footer class="blog-footer">
+    <div class="footer-copyright">
+      <h6>Copyright © 2022 The Mental Mind</h6>
+    </div>
+  </footer>
 
   <!-- Update User Modal -->
   <div
@@ -164,15 +180,9 @@
 
 <script>
 const url = "https://final-blog-api.herokuapp.com/users/";
-import Loader from "../components/Loader.vue";
-import Footer from "../components/Footer.vue";
 import axios from "axios";
 export default {
   name: "Profile",
-  components: {
-    Loader,
-    Footer,
-  },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -206,7 +216,6 @@ export default {
         })
           .then((res) => res.json())
           .then(() => {
-            alert("Your profile has been updated successfully!");
             this.$store.dispatch("auth/logout");
             this.$router.push("/profile/updated");
           });
@@ -226,7 +235,6 @@ export default {
       const new_url = `${url}${userId}`;
       try {
         await axios.delete(new_url, headers, this.currentUser).then(() => {
-          alert("Profile has been deleted!");
           this.$store.dispatch("auth/logout");
           this.$router.push("/profile/deleted");
         });
@@ -244,17 +252,17 @@ export default {
   flex-direction: column;
   row-gap: 1rem;
   width: 100%;
-  margin: 3rem 0;
+  margin: 5rem 0;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 100vh;
 }
 .profile-header {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 70%;
+  width: 100%;
 }
 .profile-header h2 {
   font-size: 60px;
@@ -268,22 +276,19 @@ export default {
   width: 100%;
   margin: 3rem 0;
 }
-.user-info {
-  width: 600px;
+.bi-person-circle {
+  width: 200px;
+}
+.card {
+  border: none;
+  width: 25rem;
+}
+.card-image {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  row-gap: 1rem;
   padding: 20px;
-  margin: 3rem 0;
-}
-.info-item {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: space-between;
-  flex-wrap: wrap;
 }
 .user-actions {
   display: flex;
@@ -294,13 +299,12 @@ export default {
   column-gap: 1rem;
 }
 .user-svg {
+  margin: 2rem 0;
   display: flex;
+  background-color: blue;
   justify-content: center;
   align-items: center;
   width: 100%;
-}
-.user-svg svg {
-  min-width: 30%;
 }
 .update-profile-btn {
   min-width: 80px;
@@ -312,7 +316,7 @@ export default {
   transition: ease-in-out 500ms;
 }
 .update-profile-btn:hover {
-  background: rgba(0, 0, 0, 0.5);
+  background: green;
   color: #fff;
 }
 .delete-profile-btn {
@@ -328,20 +332,30 @@ export default {
   background: red;
   color: #fff;
 }
-@media only screen and (max-width: 750px) {
+.blog-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.95);
+  bottom: 0;
+  margin-top: 5rem;
+  width: 100%;
+}
+h6 {
+  color: #fff;
+  padding: 10px;
+}
+.modal-body h6 {
+  color: #1f1f1f;
+}
+@media only screen and (max-width: 770px) {
   .profile-header h2 {
     font-size: 35px;
     font-weight: 700;
   }
-  .user-info {
-    width: 95%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    row-gap: 1rem;
-    padding: 20px;
-    margin: 3rem 0;
+  .card {
+    border: none;
+    width: 98%;
   }
 }
 </style>

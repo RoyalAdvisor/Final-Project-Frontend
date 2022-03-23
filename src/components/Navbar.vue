@@ -30,10 +30,10 @@
     </div>
     <div class="mobile-nav">
       <nav class="m-nav" v-if="currentUser">
-        <a href="#">
+        <a href="#" class="mobile">
           <router-link :to="{ path: '/' }" class="mobile">Home</router-link>
         </a>
-        <a href="#">
+        <a href="#" class="mobile">
           <router-link :to="{ path: '/profile' }" class="mobile"
             >Profile</router-link
           >
@@ -41,10 +41,10 @@
         <a class="mobile sign-out" @click.prevent="SignOut">Sign Out</a>
       </nav>
       <nav class="m-nav" v-if="!currentUser">
-        <a href="#">
+        <a href="#" class="mobile">
           <router-link :to="{ path: '/' }" class="mobile">Home</router-link>
         </a>
-        <a href="#">
+        <a href="#" class="mobile">
           <router-link :to="{ path: '/signin' }" class="mobile"
             >Sign In</router-link
           >
@@ -82,6 +82,7 @@ export default {
   align-items: center;
   position: fixed;
   top: 0;
+  z-index: 1;
 }
 .nav-wrapper {
   width: 100%;
@@ -90,6 +91,7 @@ export default {
   align-items: center;
   height: 60px;
   background-color: rgba(0, 0, 0, 0.95);
+  z-index: 1;
 }
 .nav-item {
   width: 100%;
@@ -171,9 +173,8 @@ a {
   flex-direction: column;
   top: 0;
   right: -100%;
-
   background-color: rgba(0, 0, 0, 0.95);
-  width: 30%;
+  width: 50%;
   height: 100%;
   z-index: 99;
   transition: 0.4s ease-in-out;
@@ -207,7 +208,7 @@ a {
   flex-direction: column;
   top: 0;
   right: 0;
-  height: 100%;
+  height: 100vh;
   transition: 0.4s ease-in-out;
 }
 @media only screen and (max-width: 1100px) {
@@ -233,18 +234,7 @@ a {
     flex-direction: column;
     top: 0;
     right: 0;
-    height: 100%;
-    transition: 0.4s ease-in-out;
-  }
-  .mobile-nav.is-active {
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    top: 0;
-    right: 0;
-    height: 100%;
+    height: 100vh;
     transition: 0.4s ease-in-out;
   }
 }

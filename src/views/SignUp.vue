@@ -205,7 +205,7 @@ Form {
   border: 1px solid red;
   border-radius: 10px;
 }
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 770px) {
   .form-header h2 {
     font-size: 35px;
     font-weight: 700;
