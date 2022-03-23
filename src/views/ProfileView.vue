@@ -19,7 +19,6 @@
             />
           </svg>
         </div>
-        <hr />
         <div class="card-body">
           <h2 class="card-title">User Info</h2>
           <h5>Status:</h5>
@@ -263,7 +262,7 @@ export default {
   margin: 5rem 0;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 .profile-header {
   display: flex;
@@ -275,6 +274,7 @@ export default {
 .profile-header h2 {
   font-size: 60px;
   font-weight: 700;
+  margin-bottom: 2rem;
 }
 .profile-container {
   display: flex;
@@ -282,7 +282,7 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 3rem 0;
+  margin: 0;
 }
 .bi-person-circle {
   width: 200px;
@@ -360,9 +360,6 @@ h6 {
   .profile-header h2 {
     font-size: 35px;
     font-weight: 700;
-  }
-  .profile-header {
-    margin-top: 2rem;
   }
   .card {
     border: none;

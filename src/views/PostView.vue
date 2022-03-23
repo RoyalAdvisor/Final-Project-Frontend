@@ -365,7 +365,6 @@ export default {
         })
           .then((res) => res.json())
           .then(() => {
-            alert("Your comment has been posted!");
             location.reload();
           });
       } catch (error) {
@@ -385,7 +384,6 @@ export default {
         })
           .then((res) => res.json())
           .then(() => {
-            alert("Your comment has been deleted!");
             location.reload();
           });
       } catch (error) {
