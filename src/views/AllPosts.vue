@@ -107,6 +107,7 @@
               <label for="main-image" class="form-label mt-1">Image *</label>
               <input
                 type="text"
+                required
                 v-model="post.main_image"
                 class="form-control"
                 id="main-image"
@@ -116,30 +117,30 @@
               <label for="title" class="form-label">Title *</label>
               <input
                 type="text"
+                required
                 v-model="post.title"
                 class="form-control"
                 id="title"
-                required
               />
             </div>
             <div class="col-md-12">
               <label for="subtitle" class="form-label">Subtitle *</label>
               <input
                 type="text"
+                required
                 v-model="post.subtitle"
                 class="form-control"
                 id="subtitle"
-                required
               />
             </div>
             <div class="col-md-12">
               <label for="desc" class="form-label">Content *</label>
               <textarea
                 type="text"
+                required
                 v-model="post.desc"
                 class="form-control"
                 id="desc"
-                required
               />
               <div class="col-md-12 info-message">
                 <h6>Note: All fields marked with * are required.</h6>
@@ -151,13 +152,12 @@
               Cancel
             </button>
             <button
-              type="button"
               class="submit-btn"
               :disabled="loading"
               @click.prevent="addPost()"
             >
               <span v-show="!loading">Create</span>
-              <span v-show="loading">Loading...</span>
+              <span v-show="loading"><Loader /></span>
             </button>
           </div>
         </div>
@@ -218,6 +218,7 @@ export default {
   methods: {
     async addPost() {
       try {
+        this.loading = true;
         fetch(`${url}create`, {
           method: "POST",
           body: JSON.stringify({
@@ -236,6 +237,7 @@ export default {
         })
           .then((res) => res.json())
           .then(() => {
+            this.loading = false;
             location.reload();
           });
       } catch (error) {
@@ -270,7 +272,7 @@ export default {
 }
 .post-item {
   display: flex;
-  width: 1000px;
+  width: 60%;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -336,10 +338,10 @@ textarea {
   padding: 0;
 }
 .loading-container {
-  margin-top: 20rem;
+  margin-top: 10rem;
 }
 .error-container {
-  margin-top: 20rem;
+  margin-top: 10rem;
 }
 .error-container h5 {
   font-family: "Cabin", sans-serif;
@@ -423,8 +425,8 @@ textarea {
   color: #fff;
   transition: ease-in-out 500ms;
 }
-.submit-btn:hover {
-  background: rgba(0, 0, 0, 0.5);
+.submit-btn:focus {
+  background: transparent;
   color: #fff;
 }
 .cancel-btn {

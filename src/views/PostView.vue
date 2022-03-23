@@ -405,7 +405,7 @@ export default {
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  max-width: 1000px;
+  width: 60%;
   margin-top: 1rem;
 }
 .post-header h2 {
@@ -424,11 +424,11 @@ export default {
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  max-width: 1000px;
+  width: 60%;
   row-gap: 1rem;
 }
 .post-image {
-  max-width: 1000px;
+  width: 60%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -447,7 +447,7 @@ export default {
 }
 .action-buttons {
   display: flex;
-  width: 1000px;
+  width: 60%;
   justify-content: flex-start;
   align-items: center;
   column-gap: 1rem;
@@ -457,8 +457,8 @@ export default {
   flex-basis: 100%;
 }
 .text-container {
-  padding: 32px;
-  width: 100%;
+  padding: 0;
+  width: 50%;
 }
 textarea {
   min-height: 264px;
@@ -466,9 +466,9 @@ textarea {
 }
 cite {
   display: flex;
-  max-width: 1000px;
+  width: 60%;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   column-gap: 2rem;
   align-items: center;
   font-family: "Cabin", sans-serif;
@@ -492,7 +492,7 @@ cite {
   font-weight: 600;
 }
 .comment-container {
-  width: 1000px;
+  width: 60%;
   min-width: 20%;
   display: flex;
   justify-content: center;
@@ -533,7 +533,7 @@ cite {
   align-items: flex-start;
   flex-direction: column;
   row-gap: 1rem;
-  padding: 20px;
+  padding: 0;
 }
 .comments {
   display: flex;
@@ -541,7 +541,7 @@ cite {
   align-items: center;
   flex-direction: column;
   row-gap: 0.5rem;
-  width: 100%;
+  width: 50%;
 }
 .comment-info {
   display: flex;
@@ -554,6 +554,7 @@ cite {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  width: 50%;
 }
 .comment-post-btn {
   min-width: 80px;
@@ -666,7 +667,7 @@ h6 {
 @media only screen and (max-width: 770px) {
   cite {
     display: flex;
-    min-width: 100%;
+    width: 100%;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -700,7 +701,7 @@ h6 {
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-    min-width: 100%;
+    width: 100%;
     margin: 0;
   }
   .post-content {
@@ -708,12 +709,12 @@ h6 {
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-    max-width: 100%;
+    width: 100%;
     padding: 0;
     row-gap: 1rem;
   }
   .post-image {
-    max-width: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

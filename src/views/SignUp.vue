@@ -1,70 +1,87 @@
 <template>
   <div class="form-wrapper">
     <header class="form-header">
-      <h2>Sign Up</h2>
+      <h2>Welcome to The Mental Mind!</h2>
     </header>
 
-    <div class="form-container shadow-sm">
-      <div class="form-image">
-        <img src="../assets/signin.jpg" alt="man-typing" />
-      </div>
+    <div class="form-container shadow" v-if="!successful">
       <Form @submit="handleSignUp" :validation-schema="signUpSchema">
-        <div v-if="!successful" class="form-block">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <Field
-              name="username"
-              type="text"
-              class="form-control"
-              placeholder="Please enter username..."
-            />
-            <ErrorMessage name="username" class="error-feedback" />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <Field
-              name="email"
-              type="text"
-              class="form-control"
-              placeholder="Please enter email..."
-            />
-            <ErrorMessage name="email" class="error-feedback" />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <Field
-              name="password"
-              type="text"
-              class="form-control"
-              placeholder="Please enter password..."
-            />
-            <ErrorMessage name="password" class="error-feedback" />
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-muted" :disabled="loading">
-              <span v-show="!loading">Sign up</span>
-              <span v-show="loading"> <Loader /> </span>
-            </button>
-          </div>
-          <div
-            v-if="message"
-            class="message"
-            :class="successful ? 'alert-success' : 'alert-danger'"
+        <div class="signin-image">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100"
+            height="100"
+            fill="currentColor"
+            class="bi bi-person-circle"
+            viewBox="0 0 16 16"
           >
-            <h5>{{ message }}</h5>
-          </div>
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            <path
+              fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+            />
+          </svg>
+        </div>
+        <header class="form-header">
+          <h2>Sign Up</h2>
+        </header>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <Field
+            name="username"
+            type="text"
+            class="form-control"
+            placeholder="Please enter username..."
+          />
+          <ErrorMessage name="username" class="error-feedback" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <Field
+            name="email"
+            type="text"
+            class="form-control"
+            placeholder="Please enter email..."
+          />
+          <ErrorMessage name="email" class="error-feedback" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <Field
+            name="password"
+            type="text"
+            class="form-control"
+            placeholder="Please enter password..."
+          />
+          <ErrorMessage name="password" class="error-feedback" />
+        </div>
+        <div class="form-group">
+          <button type="submit" class="submit-btn" :disabled="loading">
+            <span v-show="!loading">Sign up</span>
+            <span v-show="loading"> <Loader /> </span>
+          </button>
+        </div>
+        <div
+          v-if="message"
+          class="message"
+          :class="successful ? 'alert-success' : 'alert-danger'"
+        >
+          <h5>{{ message }}</h5>
         </div>
       </Form>
     </div>
   </div>
-  <Footer />
+  <footer class="blog-footer">
+    <div class="footer-copyright">
+      <h6>Copyright © 2022 The Mental Mind</h6>
+    </div>
+  </footer>
 </template>
 
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import Loader from "../components/Loader.vue";
-import Footer from "../components/Footer.vue";
 
 export default {
   name: "SignUp",
@@ -73,7 +90,6 @@ export default {
     Field,
     ErrorMessage,
     Loader,
-    Footer,
   },
   data() {
     const signUpSchema = yup.object().shape({
@@ -151,31 +167,19 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 50%;
+  width: 100%;
 }
 .form-container {
   display: flex;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: center;
-  max-width: 600px;
-  padding: 0;
+  width: 800px;
+  padding: 20px;
   margin: 3rem 0;
 }
-.form-image {
-  width: 50%;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-img {
-  width: 100%;
-  object-fit: cover;
-  margin: 0;
-}
 Form {
-  width: 50%;
+  width: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -183,7 +187,7 @@ Form {
   row-gap: 1rem;
 }
 .form-block {
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -200,12 +204,58 @@ Form {
   margin: 0;
   row-gap: 0.5rem;
 }
+.signin-image {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  row-gap: 0.5rem;
+}
 .message {
   padding: 20px;
   border: 1px solid red;
   border-radius: 10px;
 }
+.submit-btn {
+  min-width: 80px;
+  padding: 5px;
+  outline: none;
+  border: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  transition: ease-in-out 500ms;
+}
+.submit-btn:focus {
+  background: none;
+  color: #fff;
+}
+.blog-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.95);
+  bottom: 0;
+  margin-top: 5rem;
+  width: 100%;
+}
+h6 {
+  color: #fff;
+  padding: 10px;
+}
 @media only screen and (max-width: 770px) {
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 100%;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+  }
   .form-header h2 {
     font-size: 35px;
     font-weight: 700;
@@ -213,11 +263,30 @@ Form {
   .form-container {
     display: flex;
     justify-content: center;
-    flex-direction: row;
+    flex-direction: row-reverse;
     align-items: center;
-    max-width: 95%;
+    width: 98%;
     padding: 0;
     margin: 3rem 0;
+  }
+  Form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 20px;
+  }
+  .form-group {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    row-gap: 0.5rem;
   }
 }
 </style>
