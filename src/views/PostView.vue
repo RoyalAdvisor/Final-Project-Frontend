@@ -74,7 +74,7 @@
           :disabled="loading"
         >
           <span v-show="!loading">Post</span>
-          <span v-show="loading">Uploading...</span>
+          <span v-show="loading">Posting...</span>
         </button>
       </div>
       <div class="comments-header">
@@ -351,6 +351,7 @@ export default {
     },
     async addComment(postId) {
       try {
+        this.loading = true;
         fetch(`${url}${postId}/comments/create`, {
           method: "POST",
           body: JSON.stringify({
@@ -365,6 +366,7 @@ export default {
         })
           .then((res) => res.json())
           .then(() => {
+            this.loading = false;
             location.reload();
           });
       } catch (error) {
@@ -373,6 +375,7 @@ export default {
     },
     async deleteComment(postId, commentId) {
       try {
+        this.loading = true;
         fetch(`${url}${postId}/comments/delete/${commentId}`, {
           method: "DELETE",
           headers: {
@@ -384,6 +387,7 @@ export default {
         })
           .then((res) => res.json())
           .then(() => {
+            this.loading = false;
             location.reload();
           });
       } catch (error) {
