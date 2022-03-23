@@ -522,7 +522,7 @@ textarea {
   }
   .post-item {
     display: flex;
-    width: 98%;
+    width: 95%;
     justify-content: center;
     align-items: center;
     flex-direction: column;

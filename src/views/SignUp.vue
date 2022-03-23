@@ -58,7 +58,7 @@
         <div class="form-group">
           <button type="submit" class="submit-btn" :disabled="loading">
             <span v-show="!loading">Sign up</span>
-            <span v-show="loading"> <Loader /> </span>
+            <span v-show="loading">Signing up...</span>
           </button>
         </div>
         <div
@@ -153,7 +153,8 @@ export default {
   flex-direction: column;
   row-gap: 1rem;
   width: 100%;
-  margin: 3rem 0;
+  margin-top: 3rem;
+  margin-bottom: 0;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -176,7 +177,6 @@ export default {
   align-items: center;
   width: 800px;
   padding: 20px;
-  margin: 3rem 0;
 }
 Form {
   width: 90%;
@@ -238,7 +238,7 @@ Form {
   align-items: center;
   background-color: rgba(0, 0, 0, 0.95);
   bottom: 0;
-  margin-top: 5rem;
+  margin: 0;
   width: 100%;
 }
 h6 {
@@ -251,21 +251,25 @@ h6 {
     flex-direction: column;
     row-gap: 1rem;
     width: 100%;
-    margin: 0;
     justify-content: center;
     align-items: center;
-    margin: 2rem 0;
+    margin-top: 5rem;
+    margin-bottom: 0;
   }
   .form-header h2 {
     font-size: 35px;
     font-weight: 700;
+  }
+  .form-header {
+    width: 95%;
+    text-align: center;
   }
   .form-container {
     display: flex;
     justify-content: center;
     flex-direction: row-reverse;
     align-items: center;
-    width: 98%;
+    width: 95%;
     padding: 0;
     margin: 3rem 0;
   }

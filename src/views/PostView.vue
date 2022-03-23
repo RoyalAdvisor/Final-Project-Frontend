@@ -660,7 +660,7 @@ cite {
   align-items: center;
   background-color: rgba(0, 0, 0, 0.95);
   bottom: 0;
-  margin-top: 5rem;
+  margin: 0;
   width: 100%;
 }
 h6 {
@@ -735,7 +735,7 @@ h6 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 98%;
+    width: 95%;
     row-gap: 1rem;
   }
   .action-buttons {
@@ -770,7 +770,7 @@ h6 {
     width: 100%;
   }
   .comment-container {
-    width: 98%;
+    width: 95%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -780,7 +780,7 @@ h6 {
     padding: 0;
   }
   .text-container {
-    width: 98%;
+    width: 95%;
     padding: 0;
     display: flex;
     justify-content: center;
@@ -790,7 +790,7 @@ h6 {
     width: 100%;
   }
   .comment-btn {
-    width: 98%;
+    width: 95%;
   }
   .comment-content p {
     font-family: "Cabin", sans-serif;
