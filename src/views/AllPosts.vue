@@ -157,7 +157,7 @@
               @click.prevent="addPost()"
             >
               <span v-show="!loading">Create</span>
-              <span v-show="loading"><Loader /></span>
+              <span v-show="loading">Uploading...</span>
             </button>
           </div>
         </div>

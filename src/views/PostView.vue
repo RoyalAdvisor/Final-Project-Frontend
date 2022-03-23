@@ -62,6 +62,7 @@
           placeholder="Write a comment..."
           v-model="newComment"
           v-show="!loading && !errorMessage"
+          required
         />
       </div>
       <div class="comment-btn" v-if="currentUser">
@@ -70,8 +71,10 @@
           @click.prevent="addComment(this.postId)"
           type="submit"
           v-show="!loading && !errorMessage"
+          :disabled="loading"
         >
-          Post
+          <span v-show="!loading">Post</span>
+          <span v-show="loading">Uploading...</span>
         </button>
       </div>
       <div class="comments-header">
@@ -93,8 +96,10 @@
                 class="comment-delete-btn"
                 @click.prevent="deleteComment(this.postId, comment._id)"
                 v-if="currentUser.username == comment.posted_by"
+                :disabled="loading"
               >
-                Delete
+                <span v-show="!loading">Delete</span>
+                <span v-show="loading">Deleting...</span>
               </button>
             </div>
           </div>
@@ -191,7 +196,7 @@
             data-bs-dismiss="modal"
           >
             <span v-show="!loading">Update</span>
-            <span v-show="loading"> <Loader /> </span>
+            <span v-show="loading">Updating...</span>
           </button>
         </div>
       </div>
@@ -230,8 +235,10 @@
             class="post-delete-btn"
             @click.prevent="deletePost(this.postId)"
             data-bs-dismiss="modal"
+            :disabled="loading"
           >
-            Understood
+            <span v-show="!loading">Understood</span>
+            <span v-show="loading">Deleting...</span>
           </button>
         </div>
       </div>
@@ -482,10 +489,10 @@ cite {
   font-size: 14px;
 }
 .loading-container {
-  margin-top: 20rem;
+  margin-top: 10rem;
 }
 .error-container {
-  margin-top: 20rem;
+  margin-top: 10rem;
 }
 .error-container h5 {
   font-family: "Cabin", sans-serif;

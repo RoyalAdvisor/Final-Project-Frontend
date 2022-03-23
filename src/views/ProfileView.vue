@@ -122,8 +122,10 @@
             class="update-profile-btn"
             data-bs-dismiss="modal"
             @click.prevent="updateUser(this.currentUser._id)"
+            :disabled="loading"
           >
-            Update
+            <span v-show="!loading">Update</span>
+            <span v-show="loading">Updating...</span>
           </button>
         </div>
       </div>
@@ -169,8 +171,10 @@
             class="delete-profile-btn"
             data-bs-dismiss="modal"
             @click.prevent="deleteUser(this.currentUser._id)"
+            :disabled="loading"
           >
-            Understood
+            <span v-show="!loading">Delete</span>
+            <span v-show="loading">Deleting...</span>
           </button>
         </div>
       </div>
@@ -201,6 +205,7 @@ export default {
   methods: {
     async updateUser(userId) {
       try {
+        this.loading = true;
         fetch(`${url}${userId}`, {
           method: "PUT",
           body: JSON.stringify({
@@ -217,6 +222,7 @@ export default {
           .then((res) => res.json())
           .then(() => {
             this.$store.dispatch("auth/logout");
+            this.loading = false;
             this.$router.push("/profile/updated");
           });
       } catch (error) {
@@ -234,8 +240,10 @@ export default {
       };
       const new_url = `${url}${userId}`;
       try {
+        this.loading = true;
         await axios.delete(new_url, headers, this.currentUser).then(() => {
           this.$store.dispatch("auth/logout");
+          this.loading = false;
           this.$router.push("/profile/deleted");
         });
       } catch (error) {
