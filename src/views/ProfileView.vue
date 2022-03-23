@@ -361,6 +361,9 @@ h6 {
     font-size: 35px;
     font-weight: 700;
   }
+  .profile-header {
+    margin-top: 2rem;
+  }
   .card {
     border: none;
     width: 95%;

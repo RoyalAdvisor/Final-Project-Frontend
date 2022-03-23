@@ -169,6 +169,7 @@ export default {
   align-items: center;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 2rem;
 }
 .form-container {
   display: flex;
@@ -263,6 +264,7 @@ h6 {
   .form-header {
     width: 95%;
     text-align: center;
+    margin: 0;
   }
   .form-container {
     display: flex;

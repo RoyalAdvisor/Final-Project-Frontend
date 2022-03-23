@@ -106,7 +106,7 @@ h6 {
     align-items: center;
   }
   .success-container {
-    width: 98%;
+    width: 95%;
   }
 }
 </style>
