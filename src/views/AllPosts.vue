@@ -215,8 +215,7 @@ export default {
       .catch((err) => {
         this.errorMessage = `
         <h5>Oops!</h5>
-        <h5>Seems like there was an error.</h5>
-        <p>Try refreshing this page or checking your internet connection.</p>
+        <p>Seems like there was an error. Try refreshing this page or checking your internet connection.</p>
         `;
         this.loading = false;
       });
@@ -359,7 +358,17 @@ textarea {
   width: 60%;
   font-family: "Cabin", sans-serif;
   font-weight: 600;
+  margin: 0;
+  padding: 0;
 }
+.error-container h5 {
+  font-weight: 600;
+  font-size: 15px;
+} 
+.error-container p {
+  font-weight: 400;
+  font-size: 12px;
+} 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -525,7 +534,9 @@ textarea {
     margin-top: 10rem;
     width: 95%;
     font-family: "Cabin", sans-serif;
-    font-weight: 600;
+    font-weight: 600; 
+    margin: 0;
+    padding: 0;
   }
   .home-wrapper {
     display: flex;
