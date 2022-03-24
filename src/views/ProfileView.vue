@@ -6,27 +6,12 @@
     <div class="profile-container">
       <div class="card shadow">
         <div class="card-image">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            class="bi bi-person-circle"
-            viewBox="0 0 16 16"
-          >
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-            <path
-              fill-rule="evenodd"
-              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-            />
-          </svg>
+          <img :src="currentUser.profile" alt="user-image" />
         </div>
         <div class="card-body">
           <h2 class="card-title">User Info</h2>
           <h5>Status:</h5>
           <p class="card-text" style="color: green">Online</p>
-          <h5>UserID:</h5>
-          <p class="card-text">
-            {{ currentUser._id }}
-          </p>
           <h5>Username:</h5>
           <p class="card-text">
             {{ currentUser.username }}
@@ -87,6 +72,16 @@
         <div class="modal-body">
           <form class="row g-2 create-form">
             <div class="col-md-12">
+              <label for="profile" class="form-label">Profile</label>
+              <input
+                type="text"
+                v-model="updatedUser.profile"
+                class="form-control"
+                id="profile"
+                required
+              />
+            </div>
+            <div class="col-md-12">
               <label for="username" class="form-label">Username</label>
               <input
                 type="text"
@@ -103,6 +98,16 @@
                 v-model="updatedUser.email"
                 class="form-control"
                 id="email"
+                required
+              />
+            </div>
+            <div class="col-md-12">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="text"
+                v-model="updatedUser.password"
+                class="form-control"
+                id="password"
                 required
               />
             </div>
@@ -194,8 +199,10 @@ export default {
   data() {
     return {
       updatedUser: {
+        profile: "",
         username: "",
         email: "",
+        password: "",
       },
       loading: false,
       errorMessage: null,
@@ -210,6 +217,8 @@ export default {
           body: JSON.stringify({
             username: this.updatedUser.username,
             email: this.updatedUser.email,
+            profile: this.updatedUser.profile,
+            password: this.updatedUser.password,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -306,13 +315,12 @@ export default {
   flex-wrap: wrap;
   column-gap: 1rem;
 }
-.user-svg {
-  margin: 2rem 0;
-  display: flex;
-  background-color: blue;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+.card-image img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 100%;
 }
 .update-profile-btn {
   min-width: 80px;

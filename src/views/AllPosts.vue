@@ -30,18 +30,18 @@
         v-for="post in filteredPosts.slice(0, count)"
         :key="post._id"
       >
-        <div class="formatted-date">
-          <cite class="text-muted">
-            <span v-show="!loading && !errorMessage" class="text-muted"
-              >Uploaded at:</span
-            >
-            {{ moment(post.createdAt).format("MMM DD, YYYY") }}
-          </cite>
-        </div>
         <div class="post-image">
           <img :src="post.main_image" />
         </div>
         <div class="post-content">
+          <div class="formatted-date">
+            <h6 class="text-muted updated">
+              <span v-show="!loading && !errorMessage" class="text-muted"
+                >Uploaded at:</span
+              >
+              {{ moment(post.createdAt).format("MMM DD, YYYY") }}
+            </h6>
+          </div>
           <h3>{{ post.title }}</h3>
           <h4>{{ post.subtitle }}</h4>
           <div class="buttons">
@@ -64,7 +64,7 @@
     <!-- ERROR MESSAGE -->
     <div>
       <div class="error-container" v-if="!loading && errorMessage">
-        <h5>{{ errorMessage }}</h5>
+        {{ errorMessage }}
       </div>
     </div>
     <!-- LOADER -->
@@ -106,8 +106,8 @@
             <div class="col-md-12">
               <label for="main-image" class="form-label mt-1">Image *</label>
               <input
-                type="text"
                 required
+                type="text"
                 v-model="post.main_image"
                 class="form-control"
                 id="main-image"
@@ -116,8 +116,8 @@
             <div class="col-md-12">
               <label for="title" class="form-label">Title *</label>
               <input
-                type="text"
                 required
+                type="text"
                 v-model="post.title"
                 class="form-control"
                 id="title"
@@ -126,8 +126,8 @@
             <div class="col-md-12">
               <label for="subtitle" class="form-label">Subtitle *</label>
               <input
-                type="text"
                 required
+                type="text"
                 v-model="post.subtitle"
                 class="form-control"
                 id="subtitle"
@@ -136,8 +136,8 @@
             <div class="col-md-12">
               <label for="desc" class="form-label">Content *</label>
               <textarea
-                type="text"
                 required
+                type="text"
                 v-model="post.desc"
                 class="form-control"
                 id="desc"
@@ -146,20 +146,20 @@
                 <h6>Note: All fields marked with * are required.</h6>
               </div>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="cancel-btn" data-bs-dismiss="modal">
+                Cancel
+              </button>
+              <button
+                class="submit-btn"
+                :disabled="loading"
+                @click.prevent="addPost()"
+              >
+                <span v-show="!loading">Create</span>
+                <span v-show="loading">Uploading...</span>
+              </button>
+            </div>
           </form>
-          <div class="modal-footer">
-            <button type="button" class="cancel-btn" data-bs-dismiss="modal">
-              Cancel
-            </button>
-            <button
-              class="submit-btn"
-              :disabled="loading"
-              @click.prevent="addPost()"
-            >
-              <span v-show="!loading">Create</span>
-              <span v-show="loading">Uploading...</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -199,7 +199,7 @@ export default {
     },
     filteredPosts() {
       return this.posts.filter((post) => {
-        return post.title.toLowerCase().match(this.search);
+        return post.title.toLowerCase().match(this.search.toLowerCase());
       });
     },
   },
@@ -211,7 +211,11 @@ export default {
         this.loading = false;
       })
       .catch((err) => {
-        this.errorMessage = `Oops. Seems like there was an error. Try refreshing this page.`;
+        this.errorMessage = `
+        <h5>Oops!</h5>
+        <h5>Seems like there was an error.</h5>
+        <p>Try refreshing this page or checking your internet connection.</p>
+        `;
         this.loading = false;
       });
   },
@@ -304,18 +308,21 @@ h4 {
   margin: 0;
   padding: 0;
 }
-cite {
+.updated {
   display: flex;
   width: 100%;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   font-family: "Cabin", sans-serif;
-  font-weight: 600;
-  padding: 5px 20px 0px 20px;
+  column-gap: 2rem;
+  font-weight: 300;
 }
 .info-message {
   margin-top: 0.5rem;
+}
+.info-message h6 {
+  margin-bottom: 0;
 }
 textarea {
   min-height: 264px;
@@ -341,9 +348,13 @@ textarea {
   margin-top: 10rem;
 }
 .error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
   margin-top: 10rem;
-}
-.error-container h5 {
+  width: 60%;
   font-family: "Cabin", sans-serif;
   font-weight: 600;
 }
@@ -503,6 +514,17 @@ textarea {
   width: 100%;
 }
 @media only screen and (max-width: 770px) {
+  .error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 10rem;
+    width: 95%;
+    font-family: "Cabin", sans-serif;
+    font-weight: 600;
+  }
   .home-wrapper {
     display: flex;
     flex-direction: column;
@@ -539,9 +561,9 @@ textarea {
     margin: 0;
     padding: 0;
   }
-  cite {
+  .updated {
     font-size: 12px;
-    font-weight: 400;
+    font-weight: 300;
   }
   .read-btn {
     width: 60px;

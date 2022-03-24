@@ -9,22 +9,28 @@
     <!-- ERROR MESSAGE -->
     <div>
       <div class="error-container" v-if="!loading && errorMessage">
-        <h5>{{ errorMessage }}</h5>
+        {{ errorMessage }}
       </div>
     </div>
     <div class="post-container">
       <header class="post-header">
         <h2>{{ post.title }}</h2>
       </header>
-      <div class="post-image">
-        <img :src="post.main_image" />
-      </div>
-      <cite class="text-muted">
-        <span v-show="!loading && !errorMessage">Last updated:</span>
+      <h6 class="text-muted updated">
+        <img
+          :src="currentUser.profile"
+          alt="user-profile"
+          class="user-profile"
+        />
+        <span v-show="!loading && !errorMessage">{{ post.created_by }}</span>
+
         <span v-show="!loading && !errorMessage">
           {{ moment(post.updatedAt).format("MMM DD, YYYY") }}</span
         >
-      </cite>
+      </h6>
+      <div class="post-image">
+        <img :src="post.main_image" />
+      </div>
       <article class="post-content">
         <h3>{{ post.subtitle }}</h3>
         <p>
@@ -181,23 +187,27 @@
               <div class="col-md-12 info-message">
                 <h6>Note: All fields marked with * are required.</h6>
               </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="cancel-btn"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  @click.prevent="updatePost(this.postId)"
+                  class="update-btn"
+                  :disabled="loading"
+                  data-bs-dismiss="modal"
+                >
+                  <span v-show="!loading">Update</span>
+                  <span v-show="loading">Updating...</span>
+                </button>
+              </div>
             </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="cancel-btn" data-bs-dismiss="modal">
-            Cancel
-          </button>
-          <button
-            type="button"
-            @click.prevent="updatePost(this.postId)"
-            class="update-btn"
-            :disabled="loading"
-            data-bs-dismiss="modal"
-          >
-            <span v-show="!loading">Update</span>
-            <span v-show="loading">Updating...</span>
-          </button>
         </div>
       </div>
     </div>
@@ -288,7 +298,11 @@ export default {
         this.loading = false;
       })
       .catch((err) => {
-        this.errorMessage = `Oops. Seems like there was an error. Try refreshing this page.`;
+        this.errorMessage = `
+        <h5>Oops!</h5>
+        <h5>Seems like there was an error.</h5>
+        <p>Try refreshing this page or checking your internet connection.</p>
+        `;
         this.loading = false;
       });
   },
@@ -473,15 +487,15 @@ textarea {
   min-height: 264px;
   padding: 10px;
 }
-cite {
+.updated {
   display: flex;
   width: 60%;
   flex-direction: row;
-  justify-content: space-between;
-  column-gap: 2rem;
+  justify-content: flex-start;
+  column-gap: 1rem;
   align-items: center;
   font-family: "Cabin", sans-serif;
-  font-weight: 600;
+  font-weight: 300;
   padding: 0;
   margin: 0;
 }
@@ -494,9 +508,13 @@ cite {
   margin-top: 10rem;
 }
 .error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
   margin-top: 10rem;
-}
-.error-container h5 {
+  width: 60%;
   font-family: "Cabin", sans-serif;
   font-weight: 600;
 }
@@ -533,7 +551,12 @@ cite {
   padding: 0;
 }
 .info-message {
+  padding: 0;
   margin-top: 0.5rem;
+}
+.info-message h6 {
+  color: #1f1f1f;
+  padding: 0;
 }
 .comments-wrapper {
   width: 100%;
@@ -575,7 +598,7 @@ cite {
   transition: ease-in-out 500ms;
 }
 .comment-post-btn:hover {
-  background: green;
+  background: rgba(0, 0, 0, 0.95);
   color: #fff;
 }
 .comment-delete-btn {
@@ -588,7 +611,7 @@ cite {
   transition: ease-in-out 500ms;
 }
 .comment-delete-btn:hover {
-  background: red;
+  background: rgba(0, 0, 0, 0.95);
   color: #fff;
 }
 .edit-btn {
@@ -673,12 +696,30 @@ h6 {
   color: #1f1f1f;
   padding: 0;
 }
+.user-profile {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 100%;
+}
 @media only screen and (max-width: 770px) {
-  cite {
+  .error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 10rem;
+    width: 95%;
+    font-family: "Cabin", sans-serif;
+    font-weight: 600;
+  }
+  .updated {
     display: flex;
     width: 100%;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     font-size: 12px;
     font-weight: 400;
@@ -797,7 +838,7 @@ h6 {
   .comment-content p {
     font-family: "Cabin", sans-serif;
     font-style: italic;
-    font-size: 14px;
+    font-size: 12px;
   }
 }
 </style>

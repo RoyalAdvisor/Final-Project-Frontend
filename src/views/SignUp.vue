@@ -26,6 +26,16 @@
           <h2>Sign Up</h2>
         </header>
         <div class="form-group">
+          <label for="profile">Profile</label>
+          <Field
+            name="profile"
+            type="text"
+            class="form-control"
+            placeholder="Please enter your image link..."
+          />
+          <ErrorMessage name="profile" class="error-feedback" />
+        </div>
+        <div class="form-group">
           <label for="username">Username</label>
           <Field
             name="username"
@@ -106,6 +116,10 @@ export default {
         .string()
         .required("Password is required!")
         .min(6, "Must be at least 6 characters!"),
+      profile: yup
+        .string()
+        .required("Profile is required!")
+        .max(200, "Can not exceed 200 characters!"),
     });
     return {
       loading: false,
