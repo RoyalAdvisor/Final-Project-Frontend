@@ -8,9 +8,11 @@
     </div>
     <!-- ERROR MESSAGE -->
     <div>
-      <div class="error-container" v-if="!loading && errorMessage">
-        {{ errorMessage }}
-      </div>
+      <div
+        class="error-container"
+        v-if="!loading && errorMessage"
+        v-html="errorMessage"
+      ></div>
     </div>
     <div class="post-container">
       <header class="post-header">
@@ -18,9 +20,10 @@
       </header>
       <h6 class="text-muted updated">
         <img
-          :src="currentUser.profile"
+          :src="post.user_image"
           alt="user-profile"
           class="user-profile"
+          v-show="!loading && !errorMessage"
         />
         <span v-show="!loading && !errorMessage">{{ post.created_by }}</span>
 

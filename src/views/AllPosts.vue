@@ -63,9 +63,11 @@
     </div>
     <!-- ERROR MESSAGE -->
     <div>
-      <div class="error-container" v-if="!loading && errorMessage">
-        {{ errorMessage }}
-      </div>
+      <div
+        class="error-container"
+        v-if="!loading && errorMessage"
+        v-html="errorMessage"
+      ></div>
     </div>
     <!-- LOADER -->
     <div v-if="loading">
