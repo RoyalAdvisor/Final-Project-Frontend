@@ -164,7 +164,7 @@ Form {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  row-gap: 1rem;
+  row-gap: 0.5rem;
 }
 .form-group {
   width: 90%;
@@ -201,7 +201,7 @@ Form {
   transition: ease-in-out 500ms;
 }
 .submit-btn:focus {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.95);
   color: #fff;
 }
 .blog-footer {
@@ -252,7 +252,7 @@ h6 {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    row-gap: 1rem;
+    row-gap: 0.5rem;
     padding: 20px;
   }
   .form-group {
