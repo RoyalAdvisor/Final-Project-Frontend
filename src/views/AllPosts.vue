@@ -37,7 +37,7 @@
           <div class="formatted-date">
             <h6 class="text-muted updated">
               <span v-show="!loading && !errorMessage" class="text-muted"
-                >Uploaded at:</span
+                >Uploaded at</span
               >
               {{ moment(post.createdAt).format("MMM DD, YYYY") }}
             </h6>
@@ -315,7 +315,7 @@ h4 {
   justify-content: flex-start;
   align-items: center;
   font-family: "Cabin", sans-serif;
-  column-gap: 2rem;
+  column-gap: 1rem;
   font-weight: 300;
 }
 .info-message {
