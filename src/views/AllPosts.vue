@@ -62,13 +62,11 @@
       </div>
     </div>
     <!-- ERROR MESSAGE -->
-    <div>
-      <div
-        class="error-container"
-        v-if="!loading && errorMessage"
-        v-html="errorMessage"
-      ></div>
-    </div>
+    <div
+      class="error-container"
+      v-if="!loading && errorMessage"
+      :innerHTML="errorMessage"
+    ></div>
     <!-- LOADER -->
     <div v-if="loading">
       <div class="loading-container">
@@ -104,7 +102,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form class="row create-form">
+          <form @submit.prevent="addPost()" class="row create-form">
             <div class="col-md-12">
               <label for="main-image" class="form-label mt-1">Image *</label>
               <input
@@ -149,14 +147,14 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="cancel-btn" data-bs-dismiss="modal">
+              <button
+                type="button"
+                class="cancel-btn shadow-sm"
+                data-bs-dismiss="modal"
+              >
                 Cancel
               </button>
-              <button
-                class="submit-btn"
-                :disabled="loading"
-                @click.prevent="addPost()"
-              >
+              <button class="submit-btn shadow-sm" :disabled="loading">
                 <span v-show="!loading">Create</span>
                 <span v-show="loading">Uploading...</span>
               </button>
@@ -214,7 +212,7 @@ export default {
       })
       .catch((err) => {
         this.errorMessage = `
-        <h5>Oops!</h5>
+        <h1>Oops!</h1>
         <p>Seems like there was an error. Try refreshing this page or checking your internet connection.</p>
         `;
         this.loading = false;
@@ -297,6 +295,7 @@ img {
   row-gap: 0.5rem;
   width: 100%;
   padding: 20px;
+  background-color: #fff;
 }
 h3 {
   font-size: 32px;
@@ -359,16 +358,8 @@ textarea {
   font-family: "Cabin", sans-serif;
   font-weight: 600;
   margin: 0;
-  padding: 0;
+  padding: 0 !important;
 }
-.error-container h5 {
-  font-weight: 600;
-  font-size: 15px;
-} 
-.error-container p {
-  font-weight: 400;
-  font-size: 12px;
-} 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -413,7 +404,7 @@ textarea {
   transition: ease-in-out 500ms;
 }
 .create-btn:hover {
-  background: rgba(0, 0, 0, 0.5);
+  background: blueviolet;
   color: #fff;
 }
 .load-btn {
@@ -426,7 +417,7 @@ textarea {
   transition: ease-in-out 500ms;
 }
 .load-btn:hover {
-  background: rgba(0, 0, 0, 0.5);
+  background: blueviolet;
   color: #fff;
 }
 .read-btn {
@@ -448,7 +439,7 @@ textarea {
   transition: ease-in-out 500ms;
 }
 .submit-btn:focus {
-  background: transparent;
+  background: blueviolet;
   color: #fff;
 }
 .cancel-btn {
@@ -534,7 +525,7 @@ textarea {
     margin-top: 10rem;
     width: 95%;
     font-family: "Cabin", sans-serif;
-    font-weight: 600; 
+    font-weight: 600;
     margin: 0;
     padding: 0;
   }

@@ -23,7 +23,7 @@
           <div class="user-actions">
             <button
               type="button"
-              class="update-profile-btn"
+              class="update-profile-btn shadow-sm"
               data-bs-toggle="modal"
               data-bs-target="#updateUser"
             >
@@ -31,7 +31,7 @@
             </button>
             <button
               type="button"
-              class="delete-profile-btn"
+              class="delete-profile-btn shadow-sm"
               data-bs-toggle="modal"
               data-bs-target="#deleteUser"
             >
@@ -44,7 +44,7 @@
   </div>
   <footer class="blog-footer">
     <div class="footer-copyright">
-      <h6>Copyright © 2022 The Mental Mind</h6>
+      <h6 class="copyright">Copyright © 2022 The Mental Mind</h6>
     </div>
   </footer>
 
@@ -116,14 +116,14 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="delete-profile-btn"
+            class="delete-profile-btn shadow-sm"
             data-bs-dismiss="modal"
           >
             Cancel
           </button>
           <button
             type="button"
-            class="update-profile-btn"
+            class="update-profile-btn shadow-sm"
             data-bs-dismiss="modal"
             @click.prevent="updateUser(this.currentUser._id)"
             :disabled="loading"
@@ -165,14 +165,14 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="update-profile-btn"
+            class="delete-profile-btn shadow-sm"
             data-bs-dismiss="modal"
           >
             Cancel
           </button>
           <button
             type="button"
-            class="delete-profile-btn"
+            class="update-profile-btn shadow-sm"
             data-bs-dismiss="modal"
             @click.prevent="deleteUser(this.currentUser._id)"
             :disabled="loading"
@@ -268,7 +268,7 @@ export default {
   flex-direction: column;
   row-gap: 1rem;
   width: 100%;
-  margin: 5rem 0;
+  margin: 3rem 0;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -299,6 +299,7 @@ export default {
 .card {
   border: none;
   width: 25rem;
+  background: transparent;
 }
 .card-image {
   width: 100%;
@@ -316,11 +317,9 @@ export default {
   column-gap: 1rem;
 }
 .card-image img {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  border-radius: 50%;
   object-fit: cover;
-  object-position: center;
-  border-radius: 100%;
 }
 .update-profile-btn {
   min-width: 80px;
@@ -332,7 +331,7 @@ export default {
   transition: ease-in-out 500ms;
 }
 .update-profile-btn:hover {
-  background: green;
+  background: blueviolet;
   color: #fff;
 }
 .delete-profile-btn {
@@ -357,9 +356,17 @@ export default {
   margin: 0;
   width: 100%;
 }
-h6 {
+.footer-copyright {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 8px;
+}
+.copyright {
   color: #fff;
-  padding: 10px;
+  font-size: 12px;
+  margin: 0;
 }
 .modal-body h6 {
   color: #1f1f1f;

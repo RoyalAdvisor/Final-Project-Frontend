@@ -3,7 +3,7 @@
   <Posts />
   <footer class="blog-footer">
     <div class="footer-copyright">
-      <h6>Copyright © 2022 The Mental Mind</h6>
+      <h6 class="copyright">Copyright © 2022 The Mental Mind</h6>
     </div>
   </footer>
 </template>
@@ -30,8 +30,16 @@ export default {
   margin: 0;
   width: 100%;
 }
-h6 {
+.footer-copyright {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 8px;
+}
+.copyright {
   color: #fff;
-  padding: 10px;
+  font-size: 12px;
+  margin: 0;
 }
 </style>

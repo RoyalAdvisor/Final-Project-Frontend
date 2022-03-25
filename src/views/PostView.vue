@@ -7,13 +7,11 @@
       </div>
     </div>
     <!-- ERROR MESSAGE -->
-    <div>
-      <div
-        class="error-container"
-        v-if="!loading && errorMessage"
-        v-html="errorMessage"
-      ></div>
-    </div>
+    <div
+      class="error-container"
+      v-if="!loading && errorMessage"
+      :innerHTML="errorMessage"
+    ></div>
     <div class="post-container">
       <header class="post-header">
         <h2>{{ post.title }}</h2>
@@ -43,7 +41,7 @@
       <div class="action-buttons" v-if="currentUser">
         <button
           type="button"
-          class="edit-btn"
+          class="edit-btn shadow-sm"
           data-bs-toggle="modal"
           data-bs-target="#editModal"
           v-if="currentUser.username == post.created_by"
@@ -52,7 +50,7 @@
         </button>
         <button
           type="button"
-          class="delete-btn"
+          class="delete-btn shadow-sm"
           data-bs-toggle="modal"
           data-bs-target="#deleteModal"
           v-if="currentUser.username == post.created_by"
@@ -63,29 +61,32 @@
     </div>
     <div class="comment-container">
       <h5 v-if="currentUser" v-show="!loading && !errorMessage">Comments</h5>
-      <div class="text-container" v-if="currentUser">
+      <form
+        @submit.prevent="addComment(this.postId)"
+        class="text-container"
+        v-if="currentUser"
+      >
         <textarea
+          required
           type="text"
-          class="form-control"
+          class="form-control text shadow-sm"
           id="comments"
           placeholder="Write a comment..."
           v-model="newComment"
           v-show="!loading && !errorMessage"
-          required
         />
-      </div>
-      <div class="comment-btn" v-if="currentUser">
-        <button
-          class="comment-post-btn"
-          @click.prevent="addComment(this.postId)"
-          type="submit"
-          v-show="!loading && !errorMessage"
-          :disabled="loading"
-        >
-          <span v-show="!loading">Post</span>
-          <span v-show="loading">Posting...</span>
-        </button>
-      </div>
+        <div class="comment-btn" v-if="currentUser">
+          <button
+            class="comment-post-btn shadow-sm"
+            type="submit"
+            v-show="!loading && !errorMessage"
+            :disabled="loading"
+          >
+            <span v-show="!loading">Post</span>
+            <span v-show="loading">Posting...</span>
+          </button>
+        </div>
+      </form>
       <div class="comments-header">
         <h5 v-show="!loading && !errorMessage">Recent Comments</h5>
       </div>
@@ -102,7 +103,7 @@
             </div>
             <div class="comment-action" v-if="currentUser">
               <button
-                class="comment-delete-btn"
+                class="comment-delete-btn shadow-sm"
                 @click.prevent="deleteComment(this.postId, comment._id)"
                 v-if="currentUser.username == comment.posted_by"
                 :disabled="loading"
@@ -121,7 +122,7 @@
   </div>
   <footer class="blog-footer">
     <div class="footer-copyright">
-      <h6>Copyright © 2022 The Mental Mind</h6>
+      <h6 class="copyright">Copyright © 2022 The Mental Mind</h6>
     </div>
   </footer>
 
@@ -139,7 +140,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Updated post.</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Update post.</h5>
           <button
             type="button"
             class="btn-close"
@@ -148,10 +149,14 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form class="row create-form">
+          <form
+            @submit.prevent="updatePost(this.postId)"
+            class="row create-form"
+          >
             <div class="col-md-12">
               <label for="main-image" class="form-label mt-1">Image *</label>
               <input
+                required
                 type="text"
                 v-model="updatedPost.main_image"
                 class="form-control"
@@ -161,54 +166,52 @@
             <div class="col-md-12">
               <label for="title" class="form-label">Title *</label>
               <input
+                required
                 type="text"
                 v-model="updatedPost.title"
                 class="form-control"
                 id="title"
-                required
               />
             </div>
             <div class="col-md-12">
               <label for="subtitle" class="form-label">Subtitle *</label>
               <input
+                required
                 type="text"
                 v-model="updatedPost.subtitle"
                 class="form-control"
                 id="subtitle"
-                required
               />
             </div>
             <div class="col-md-12">
               <label for="desc" class="form-label">Content *</label>
               <textarea
+                required
                 type="text"
                 v-model="updatedPost.desc"
                 class="form-control"
                 id="desc"
-                required
               />
               <div class="col-md-12 info-message">
                 <h6>Note: All fields marked with * are required.</h6>
               </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="cancel-btn"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  @click.prevent="updatePost(this.postId)"
-                  class="update-btn"
-                  :disabled="loading"
-                  data-bs-dismiss="modal"
-                >
-                  <span v-show="!loading">Update</span>
-                  <span v-show="loading">Updating...</span>
-                </button>
-              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="cancel-btn shadow-sm"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="update-btn shadow-sm"
+                :disabled="loading"
+              >
+                <span v-show="!loading">Update</span>
+                <span v-show="loading">Updating...</span>
+              </button>
             </div>
           </form>
         </div>
@@ -240,12 +243,16 @@
           ></button>
         </div>
         <div class="modal-footer">
-          <button type="button" class="cancel-btn" data-bs-dismiss="modal">
+          <button
+            type="button"
+            class="cancel-btn shadow-sm"
+            data-bs-dismiss="modal"
+          >
             Cancel
           </button>
           <button
             type="button"
-            class="post-delete-btn"
+            class="post-delete-btn shadow-sm"
             @click.prevent="deletePost(this.postId)"
             data-bs-dismiss="modal"
             :disabled="loading"
@@ -302,7 +309,7 @@ export default {
       })
       .catch((err) => {
         this.errorMessage = `
-        <h5>Oops!</h5>
+        <h1>Oops!</h1>
         <p>Seems like there was an error. Try refreshing this page or checking your internet connection.</p>
         `;
         this.loading = false;
@@ -482,12 +489,20 @@ export default {
   flex-basis: 100%;
 }
 .text-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 1rem;
   padding: 0;
   width: 50%;
 }
 textarea {
   min-height: 264px;
   padding: 10px;
+}
+.text {
+  border: none;
 }
 .updated {
   display: flex;
@@ -503,8 +518,7 @@ textarea {
 }
 .comment-content p {
   font-family: "Cabin", sans-serif;
-  font-style: italic;
-  font-size: 14px;
+  font-size: 15px;
 }
 .loading-container {
   margin-top: 10rem;
@@ -522,14 +536,6 @@ textarea {
   margin: 0;
   padding: 0;
 }
-.error-container h5 {
-  font-weight: 600;
-  font-size: 15px;
-} 
-.error-container p {
-  font-weight: 400;
-  font-size: 12px;
-} 
 .comment-container {
   width: 60%;
   min-width: 20%;
@@ -598,7 +604,9 @@ textarea {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 50%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 .comment-post-btn {
   min-width: 80px;
@@ -610,7 +618,7 @@ textarea {
   transition: ease-in-out 500ms;
 }
 .comment-post-btn:hover {
-  background: rgba(0, 0, 0, 0.95);
+  background: blueviolet;
   color: #fff;
 }
 .comment-delete-btn {
@@ -623,7 +631,7 @@ textarea {
   transition: ease-in-out 500ms;
 }
 .comment-delete-btn:hover {
-  background: rgba(0, 0, 0, 0.95);
+  background: red;
   color: #fff;
 }
 .edit-btn {
@@ -636,7 +644,7 @@ textarea {
   transition: ease-in-out 500ms;
 }
 .edit-btn:hover {
-  background: green;
+  background: blueviolet;
   color: #fff;
 }
 .delete-btn {
@@ -662,7 +670,7 @@ textarea {
   transition: ease-in-out 500ms;
 }
 .post-delete-btn:hover {
-  background: green;
+  background: blueviolet;
   color: #fff;
 }
 .cancel-btn {
@@ -688,7 +696,7 @@ textarea {
   transition: ease-in-out 500ms;
 }
 .update-btn:hover {
-  background: green;
+  background: blueviolet;
   color: #fff;
 }
 .blog-footer {
@@ -700,9 +708,17 @@ textarea {
   margin: 0;
   width: 100%;
 }
-h6 {
+.footer-copyright {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 8px;
+}
+.copyright {
   color: #fff;
-  padding: 10px;
+  font-size: 12px;
+  margin: 0;
 }
 .comment-content h6 {
   color: #1f1f1f;
@@ -803,7 +819,7 @@ h6 {
     column-gap: 1rem;
   }
   .comments-wrapper {
-    width: 100%;
+    width: 95%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -837,22 +853,30 @@ h6 {
     padding: 0;
   }
   .text-container {
-    width: 95%;
-    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 0;
+    width: 95%;
   }
   #comments {
     width: 100%;
   }
   .comment-btn {
-    width: 95%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    width: 100%;
   }
   .comment-content p {
     font-family: "Cabin", sans-serif;
-    font-style: italic;
-    font-size: 12px;
+    font-style: normal;
+    font-size: 15px;
   }
 }
 </style>

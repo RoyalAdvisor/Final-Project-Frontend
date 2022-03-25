@@ -18,5 +18,8 @@ body {
   box-sizing: border-box;
   color: #1f1f1f;
   font-family: "Oswald", sans-serif;
+  background-image: url("./assets/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 </style>

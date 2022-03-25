@@ -107,7 +107,7 @@ a {
   color: #fff;
 }
 .nav-link.active {
-  color: red;
+  color: blueviolet;
 }
 .mobile {
   font-size: 1.3rem;
@@ -118,20 +118,13 @@ a {
 }
 .menu {
   display: block;
-
   width: 40px;
   margin-left: 0.5rem;
-
   cursor: pointer;
-
   outline: none;
-
   appearance: none;
-
   background: none;
-
   border: none;
-
   z-index: 99;
 }
 
@@ -139,20 +132,15 @@ a {
 .menu:before,
 .menu:after {
   content: "";
-
   display: block;
-
   width: 100%;
-
   height: 5px;
-
-  margin: 0 auto 5px;
-
   background-color: #fff;
-
   transition: 0.5s ease-in-out;
 }
-
+.bar {
+  margin: 5px 0;
+}
 .menu.is-active:before {
   transform: rotate(45deg) translate(8px, 6px);
 }
@@ -218,13 +206,14 @@ a {
   .menu-container {
     background-color: rgba(0, 0, 0, 0.97);
     width: 100%;
-    height: 60px;
+    height: 40px;
     position: fixed;
     top: 0;
     display: flex;
     justify-content: flex start;
     align-items: center;
     z-index: 6;
+    padding: 0;
   }
   .mobile-nav.is-active {
     position: fixed;

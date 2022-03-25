@@ -1,13 +1,13 @@
 <template>
-  <PulseLoader :loading="loading" :color="'#1f1f1f'" />
+  <GridLoader :loading="loading" :color="'#1f1f1f'" />
 </template>
 
 <script>
-import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+import GridLoader from "vue-spinner/src/GridLoader.vue";
 export default {
   name: "Loader",
   components: {
-    PulseLoader,
+    GridLoader,
   },
   props: {
     loading: "",

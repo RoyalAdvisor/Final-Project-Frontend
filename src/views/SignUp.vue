@@ -7,20 +7,7 @@
     <div class="form-container shadow" v-if="!successful">
       <Form @submit="handleSignUp" :validation-schema="signUpSchema">
         <div class="signin-image">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="100"
-            height="100"
-            fill="currentColor"
-            class="bi bi-person-circle"
-            viewBox="0 0 16 16"
-          >
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-            <path
-              fill-rule="evenodd"
-              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-            />
-          </svg>
+          <img src="../assets/mentalmindlogo.svg" alt="mental-mind-logo" />
         </div>
         <header class="form-header">
           <h2>Sign Up</h2>
@@ -30,7 +17,7 @@
           <Field
             name="profile"
             type="text"
-            class="form-control"
+            class="form-control shadow-sm"
             placeholder="Please enter your image link..."
           />
           <ErrorMessage name="profile" class="error-feedback" />
@@ -40,7 +27,7 @@
           <Field
             name="username"
             type="text"
-            class="form-control"
+            class="form-control shadow-sm"
             placeholder="Please enter username..."
           />
           <ErrorMessage name="username" class="error-feedback" />
@@ -50,7 +37,7 @@
           <Field
             name="email"
             type="text"
-            class="form-control"
+            class="form-control shadow-sm"
             placeholder="Please enter email..."
           />
           <ErrorMessage name="email" class="error-feedback" />
@@ -59,14 +46,18 @@
           <label for="password">Password</label>
           <Field
             name="password"
-            type="text"
-            class="form-control"
+            type="password"
+            class="form-control shadow-sm"
             placeholder="Please enter password..."
           />
           <ErrorMessage name="password" class="error-feedback" />
         </div>
         <div class="form-group">
-          <button type="submit" class="submit-btn" :disabled="loading">
+          <button
+            type="submit"
+            class="submit-btn shadow-sm"
+            :disabled="loading"
+          >
             <span v-show="!loading">Sign up</span>
             <span v-show="loading">Signing up...</span>
           </button>
@@ -83,7 +74,7 @@
   </div>
   <footer class="blog-footer">
     <div class="footer-copyright">
-      <h6>Copyright © 2022 The Mental Mind</h6>
+      <h6 class="copyright">Copyright © 2022 The Mental Mind</h6>
     </div>
   </footer>
 </template>
@@ -211,8 +202,11 @@ Form {
   margin: 0;
   row-gap: 0.5rem;
 }
+.form-control {
+  border: none;
+}
 .signin-image {
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -220,6 +214,9 @@ Form {
   padding: 0;
   margin: 0;
   row-gap: 0.5rem;
+}
+.signin-image img {
+  width: 150px;
 }
 .message {
   padding: 20px;
@@ -236,7 +233,7 @@ Form {
   transition: ease-in-out 500ms;
 }
 .submit-btn:focus {
-  background: rgba(0, 0, 0, 0.95);
+  background: blueviolet;
   color: #fff;
 }
 .blog-footer {
@@ -248,9 +245,17 @@ Form {
   margin: 0;
   width: 100%;
 }
-h6 {
+.footer-copyright {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 8px;
+}
+.copyright {
   color: #fff;
-  padding: 10px;
+  font-size: 12px;
+  margin: 0;
 }
 @media only screen and (max-width: 770px) {
   .form-wrapper {
