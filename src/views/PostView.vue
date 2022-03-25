@@ -521,7 +521,7 @@ textarea {
   font-size: 15px;
 }
 .loading-container {
-  margin-top: 10rem;
+  margin-top: 8rem;
 }
 .error-container {
   display: flex;
@@ -529,7 +529,7 @@ textarea {
   align-items: center;
   flex-direction: column;
   text-align: center;
-  margin-top: 10rem;
+  margin-top: 8rem;
   width: 60%;
   font-family: "Cabin", sans-serif;
   font-weight: 600;

@@ -55,6 +55,9 @@ export default {
   flex-direction: column;
   max-width: 600px;
 }
+p {
+  text-align: center;
+}
 .sign-up {
   display: flex;
   max-width: 600px;
@@ -71,7 +74,7 @@ export default {
   transition: ease-in-out 500ms;
 }
 .signin-btn:hover {
-  background: green;
+  background: blueviolet;
   color: #fff;
 }
 .blog-footer {

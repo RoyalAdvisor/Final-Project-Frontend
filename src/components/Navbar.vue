@@ -2,9 +2,10 @@
   <nav class="navbar">
     <div class="nav-wrapper">
       <div class="nav-item" v-if="currentUser">
-        <a href="#">
+        <a href="#home-page">
           <router-link :to="{ path: '/' }" class="nav-link">Home</router-link>
         </a>
+        <a href="#contact-page" class="nav-link">Contact</a>
         <a href="#">
           <router-link :to="{ path: '/profile' }" class="nav-link"
             >Profile</router-link
@@ -13,9 +14,10 @@
         <a class="nav-link sign-out" @click.prevent="SignOut">Sign Out</a>
       </div>
       <div class="nav-item" v-if="!currentUser">
-        <a href="#">
+        <a href="#home-page">
           <router-link :to="{ path: '/' }" class="nav-link">Home</router-link>
         </a>
+        <a href="#contact-page" class="nav-link">Contact</a>
         <a href="#">
           <router-link :to="{ path: '/signin' }" class="nav-link"
             >Sign In</router-link
@@ -30,9 +32,10 @@
     </div>
     <div class="mobile-nav">
       <nav class="m-nav" v-if="currentUser">
-        <a href="#" class="mobile">
+        <a href="#home-page" class="mobile">
           <router-link :to="{ path: '/' }" class="mobile">Home</router-link>
         </a>
+        <a href="#contact-page" class="nav-link">Contact</a>
         <a href="#" class="mobile">
           <router-link :to="{ path: '/profile' }" class="mobile"
             >Profile</router-link
@@ -41,9 +44,10 @@
         <a class="mobile sign-out" @click.prevent="SignOut">Sign Out</a>
       </nav>
       <nav class="m-nav" v-if="!currentUser">
-        <a href="#" class="mobile">
+        <a href="#home-page" class="mobile">
           <router-link :to="{ path: '/' }" class="mobile">Home</router-link>
         </a>
+        <a href="#contact-page" class="nav-link">Contact</a>
         <a href="#" class="mobile">
           <router-link :to="{ path: '/signin' }" class="mobile"
             >Sign In</router-link

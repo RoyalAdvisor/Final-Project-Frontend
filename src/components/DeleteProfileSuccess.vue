@@ -51,6 +51,9 @@ export default {
   flex-direction: column;
   max-width: 600px;
 }
+p {
+  text-align: center;
+}
 .blog-footer {
   display: flex;
   justify-content: center;

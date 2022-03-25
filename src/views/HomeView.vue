@@ -1,45 +1,23 @@
 <template>
-  <Landing />
-  <Posts />
-  <footer class="blog-footer">
-    <div class="footer-copyright">
-      <h6 class="copyright">Copyright © 2022 The Mental Mind</h6>
-    </div>
-  </footer>
+  <section id="home-page">
+    <Landing />
+    <Posts />
+    <ContactView />
+  </section>
 </template>
 <script>
 import Posts from "./AllPosts.vue";
 import Landing from "../components/Landing.vue";
+import ContactView from "./ContactView.vue";
 
 export default {
   name: "Home",
   components: {
     Posts,
     Landing,
+    ContactView,
   },
 };
 </script>
 
-<style scoped>
-.blog-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.95);
-  bottom: 0;
-  margin: 0;
-  width: 100%;
-}
-.footer-copyright {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 8px;
-}
-.copyright {
-  color: #fff;
-  font-size: 12px;
-  margin: 0;
-}
-</style>
+<style scoped></style>
