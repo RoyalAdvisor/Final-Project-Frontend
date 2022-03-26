@@ -5,7 +5,6 @@
         <a href="#home-page">
           <router-link :to="{ path: '/' }" class="nav-link">Home</router-link>
         </a>
-        <a href="#contact-page" class="nav-link">Contact</a>
         <a href="#">
           <router-link :to="{ path: '/profile' }" class="nav-link"
             >Profile</router-link
@@ -17,7 +16,6 @@
         <a href="#home-page">
           <router-link :to="{ path: '/' }" class="nav-link">Home</router-link>
         </a>
-        <a href="#contact-page" class="nav-link">Contact</a>
         <a href="#">
           <router-link :to="{ path: '/signin' }" class="nav-link"
             >Sign In</router-link
@@ -35,7 +33,6 @@
         <a href="#home-page" class="mobile">
           <router-link :to="{ path: '/' }" class="mobile">Home</router-link>
         </a>
-        <a href="#contact-page" class="nav-link">Contact</a>
         <a href="#" class="mobile">
           <router-link :to="{ path: '/profile' }" class="mobile"
             >Profile</router-link
@@ -47,7 +44,6 @@
         <a href="#home-page" class="mobile">
           <router-link :to="{ path: '/' }" class="mobile">Home</router-link>
         </a>
-        <a href="#contact-page" class="nav-link">Contact</a>
         <a href="#" class="mobile">
           <router-link :to="{ path: '/signin' }" class="mobile"
             >Sign In</router-link

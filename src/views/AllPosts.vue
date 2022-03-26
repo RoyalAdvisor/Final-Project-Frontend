@@ -19,12 +19,15 @@
               type="text"
               v-model="search"
               name="search"
-              placeholder="Find blogs..."
+              placeholder="Search blogs..."
               class="search-bar shadow"
             />
           </div>
         </div>
       </div>
+      <header class="about-header">
+        <h3>Recent Posts</h3>
+      </header>
       <div
         class="post-item shadow"
         v-for="post in filteredPosts.slice(0, count)"
@@ -110,7 +113,11 @@
                 type="text"
                 v-model="post.main_image"
                 class="form-control"
+                placeholder="Insert image link..."
                 id="main-image"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Images should be uploaded using image links. Example: https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com... Recommended image size is 1200 x 800."
               />
             </div>
             <div class="col-md-12">
@@ -198,7 +205,7 @@ export default {
       return this.$store.state.auth.user;
     },
     filteredPosts() {
-      return this.posts.filter((post) => {
+      return this.posts.reverse().filter((post) => {
         return post.title.toLowerCase().match(this.search.toLowerCase());
       });
     },
@@ -265,7 +272,31 @@ export default {
   align-items: center;
   margin: 5rem 0;
 }
+.about-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.about-header h3 {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0;
+}
+.about-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 60%;
+  row-gap: 1rem;
+}
+.about-content h5,
+p {
+  text-align: center;
+}
 .home-container {
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -430,21 +461,21 @@ textarea {
   border-bottom: 2px solid rgba(0, 0, 0, 0.95);
 }
 .submit-btn {
-  min-width: 120px;
-  padding: 10px;
+  min-width: 80px;
+  padding: 5px;
   outline: none;
   border: none;
   background: rgba(0, 0, 0, 0.95);
   color: #fff;
   transition: ease-in-out 500ms;
 }
-.submit-btn:focus {
+.submit-btn:hover {
   background: blueviolet;
   color: #fff;
 }
 .cancel-btn {
-  min-width: 120px;
-  padding: 10px;
+  min-width: 80px;
+  padding: 5px;
   outline: none;
   border: none;
   background: rgba(0, 0, 0, 0.95);
@@ -516,6 +547,14 @@ textarea {
   width: 100%;
 }
 @media only screen and (max-width: 770px) {
+  .about-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 95%;
+    row-gap: 1rem;
+  }
   .error-container {
     display: flex;
     justify-content: center;

@@ -72,17 +72,21 @@
         <div class="modal-body">
           <form class="row g-2 create-form">
             <div class="col-md-12">
-              <label for="profile" class="form-label">Profile</label>
+              <label for="profile" class="form-label">Profile Image *</label>
               <input
                 type="text"
                 v-model="updatedUser.profile"
                 class="form-control"
                 id="profile"
+                placeholder="Insert image link..."
                 required
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Images should be uploaded using image links. Example: https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com... Recommended image size is 800 x 800."
               />
             </div>
             <div class="col-md-12">
-              <label for="username" class="form-label">Username</label>
+              <label for="username" class="form-label">Username *</label>
               <input
                 type="text"
                 v-model="updatedUser.username"
@@ -92,7 +96,7 @@
               />
             </div>
             <div class="col-md-12">
-              <label for="email" class="form-label">Email</label>
+              <label for="email" class="form-label">Email *</label>
               <input
                 type="text"
                 v-model="updatedUser.email"
@@ -102,7 +106,7 @@
               />
             </div>
             <div class="col-md-12">
-              <label for="password" class="form-label">Password</label>
+              <label for="password" class="form-label">Password *</label>
               <input
                 type="text"
                 v-model="updatedUser.password"
@@ -110,6 +114,9 @@
                 id="password"
                 required
               />
+            </div>
+            <div class="col-md-12 info-message">
+              <h6>Note: All fields marked with * are required.</h6>
             </div>
           </form>
         </div>
@@ -173,7 +180,6 @@
           <button
             type="button"
             class="update-profile-btn shadow-sm"
-            data-bs-dismiss="modal"
             @click.prevent="deleteUser(this.currentUser._id)"
             :disabled="loading"
           >
@@ -371,6 +377,9 @@ export default {
 }
 .modal-body h6 {
   color: #1f1f1f;
+}
+.info-message h6 {
+  margin-bottom: 0;
 }
 @media only screen and (max-width: 770px) {
   .profile-header h2 {

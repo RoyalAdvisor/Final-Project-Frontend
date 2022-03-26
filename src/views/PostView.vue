@@ -116,7 +116,7 @@
         </div>
       </div>
       <div v-if="post.comments == 0">
-        <h6 class="text-muted">No comments have been posted</h6>
+        <h6 class="text-muted">Be the first to post a comment.</h6>
       </div>
     </div>
   </div>
@@ -159,8 +159,12 @@
                 required
                 type="text"
                 v-model="updatedPost.main_image"
+                placeholder="Insert image link..."
                 class="form-control"
                 id="main-image"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Images should be uploaded using image links. Example: https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com... Recommended image size is 1200 x 800."
               />
             </div>
             <div class="col-md-12">
